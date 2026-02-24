@@ -54,6 +54,106 @@
 
 <h1>Data Understanding - Dataset Iris</h1>
 
+<h1>Data Understanding – Dataset Iris</h1>
+
+<div class="section">
+    <h2>1. Pengertian</h2>
+    <p>
+        Data Understanding merupakan tahap awal dalam proses data mining yang berfokus pada proses 
+        mengenali, memahami, dan memeriksa kualitas data sebelum dilakukan analisis lanjutan.
+        Pada tahap ini dilakukan pengamatan langsung terhadap isi dataset agar peneliti mengetahui 
+        struktur, kondisi, serta kelayakan data.
+    </p>
+    <p>
+        Tahap ini penting karena kualitas pemahaman data akan sangat mempengaruhi hasil analisis berikutnya.
+    </p>
+</div>
+
+<div class="section">
+    <h2>2. Collect Initial Data</h2>
+    <p>
+        Pada tahap ini dilakukan pengambilan dataset Iris yang digunakan sebagai bahan analisis.
+        Dataset diperoleh dalam bentuk file CSV yang berisi data pengukuran bunga iris.
+        Data kemudian di-import ke dalam aplikasi <strong>Orange</strong> untuk dilakukan eksplorasi.
+    </p>
+    <p>
+        Tujuan tahap ini adalah memastikan data berhasil dikumpulkan dan siap digunakan.
+    </p>
+</div>
+
+<div class="section">
+    <h2>3. Describe Data</h2>
+    <p>Berdasarkan tampilan pada Data Table di Orange:</p>
+
+    <table>
+        <tr>
+            <th>Jumlah Data</th>
+            <th>Jumlah Variabel</th>
+            <th>Missing Value</th>
+        </tr>
+        <tr>
+            <td>150 Baris</td>
+            <td>5 Kolom</td>
+            <td>Tidak Ada</td>
+        </tr>
+    </table>
+
+    <p>Struktur Dataset:</p>
+    <ul>
+        <li><strong>Variabel Numerik:</strong>
+            <ul>
+                <li>sepal_length (panjang kelopak)</li>
+                <li>sepal_width (lebar kelopak)</li>
+                <li>petal_length (panjang mahkota)</li>
+                <li>petal_width (lebar mahkota)</li>
+            </ul>
+        </li>
+        <li><strong>Variabel Kategorikal:</strong>
+            <ul>
+                <li>species (jenis bunga)</li>
+            </ul>
+        </li>
+    </ul>
+
+    <p>
+        Setiap baris merepresentasikan satu bunga iris beserta ukuran fisiknya.
+    </p>
+</div>
+
+<div class="section">
+    <h2>4. Explore Data</h2>
+
+    <p><strong>Scatter Plot</strong> digunakan untuk melihat penyebaran data antar variabel. 
+    Dari grafik terlihat bahwa data membentuk beberapa kelompok berdasarkan spesies, 
+    meskipun sebagian masih saling berdekatan.</p>
+
+    <p><strong>Correlations</strong> digunakan untuk mengetahui hubungan antar variabel numerik. 
+    Hasil menunjukkan bahwa terdapat variabel yang memiliki hubungan kuat dan ada yang lemah.</p>
+
+    <p><strong>Box Plot</strong> digunakan untuk melihat distribusi data. 
+    Secara umum data tersebar dalam rentang yang wajar tanpa outlier ekstrem.</p>
+
+    <p><strong>Rank</strong> digunakan untuk mengetahui tingkat kepentingan variabel 
+    dalam membedakan spesies. Terlihat bahwa tidak semua variabel memiliki pengaruh yang sama.</p>
+
+    <p><strong>Pivot Table</strong> menunjukkan bahwa jumlah data tiap spesies seimbang, 
+    masing-masing sebanyak 50 data.</p>
+</div>
+
+<div class="section">
+    <h2>5. Verify Data Quality</h2>
+    <ul>
+        <li>Tidak ada missing value</li>
+        <li>Tidak ada duplikasi mencolok</li>
+        <li>Format data konsisten</li>
+        <li>Dataset siap dianalisis</li>
+    </ul>
+
+    <p>
+        Dengan demikian dataset Iris memiliki kualitas yang baik untuk proses eksplorasi menggunakan Orange.
+    </p>
+</div>
+
 <h2>1. Informasi Dataset</h2>
 <ul>
 <li>Jumlah Data: 150</li>
