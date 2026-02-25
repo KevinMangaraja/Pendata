@@ -418,203 +418,496 @@ document.write(`
               
               
 
-<div id="jb-print-docs-body" class="onlyprint">
-    <h1>HIMPUNAN</h1>
-    <!-- Table of contents -->
-    <div id="print-main-content">
-        <div id="jb-print-toc">
-            
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hukum-de-morgan">1. Hukum De Morgan</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hukum-absorpsi-absorption-laws">2. Hukum Absorpsi (Absorption Laws)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2. Hukum Absorpsi (Absorption Laws)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#complement-laws">3. Complement laws</a></li>
-</ul>
-            </nav>
-        </div>
+<div class="container">
+
+<h1>Data Understanding - Dataset Iris</h1>
+
+<div class="section">
+    <h2>1. Pengertian</h2>
+    <p>
+        Data Understanding merupakan tahap awal dalam proses data mining yang berfokus pada proses 
+        mengenali, memahami, dan memeriksa kualitas data sebelum dilakukan analisis lanjutan.
+        Pada tahap ini dilakukan pengamatan langsung terhadap isi dataset agar peneliti mengetahui 
+        struktur, kondisi, serta kelayakan data.
+    </p>
+    <p>
+        Tahap ini penting karena kualitas pemahaman data akan sangat mempengaruhi hasil analisis berikutnya.
+    </p>
+</div>
+
+<div class="section">
+    <h2>2. Collect Initial Data</h2>
+    <p>
+        Pada tahap ini dilakukan pengambilan dataset Iris yang digunakan sebagai bahan analisis.
+        Dataset diperoleh dalam bentuk file CSV yang berisi data pengukuran bunga iris.
+        Data kemudian di-import ke dalam aplikasi <strong>Orange</strong> untuk dilakukan eksplorasi.
+    </p>
+    <p>
+        Tujuan tahap ini adalah memastikan data berhasil dikumpulkan dan siap digunakan.
+    </p>
+</div>
+
+<div class="section">
+    <h2>3. Describe Data</h2>
+    <p>Berdasarkan tampilan pada Data Table di Orange:</p>
+
+    <table>
+        <tr>
+            <th>Jumlah Data</th>
+            <th>Jumlah Variabel</th>
+            <th>Missing Value</th>
+        </tr>
+        <tr>
+            <td>150 Baris</td>
+            <td>5 Kolom</td>
+            <td>Tidak Ada</td>
+        </tr>
+    </table>
+
+    <p>Struktur Dataset:</p>
+    <ul>
+        <li><strong>Variabel Numerik:</strong>
+            <ul>
+                <li>sepal_length (panjang kelopak)</li>
+                <li>sepal_width (lebar kelopak)</li>
+                <li>petal_length (panjang mahkota)</li>
+                <li>petal_width (lebar mahkota)</li>
+            </ul>
+        </li>
+        <li><strong>Variabel Kategorikal:</strong>
+            <ul>
+                <li>species (jenis bunga)</li>
+            </ul>
+        </li>
+    </ul>
+
+    <p>
+        Setiap baris merepresentasikan satu bunga iris beserta ukuran fisiknya.
+    </p>
+</div>
+
+<div class="section">
+    <h2>4. Explore Data</h2>
+
+    <p><strong>Scatter Plot</strong> digunakan untuk melihat penyebaran data antar variabel. 
+    Dari grafik terlihat bahwa data membentuk beberapa kelompok berdasarkan spesies, 
+    meskipun sebagian masih saling berdekatan.</p>
+
+    <p><strong>Correlations</strong> digunakan untuk mengetahui hubungan antar variabel numerik. 
+    Hasil menunjukkan bahwa terdapat variabel yang memiliki hubungan kuat dan ada yang lemah.</p>
+
+    <p><strong>Box Plot</strong> digunakan untuk melihat distribusi data. 
+    Secara umum data tersebar dalam rentang yang wajar tanpa outlier ekstrem.</p>
+
+    <p><strong>Rank</strong> digunakan untuk mengetahui tingkat kepentingan variabel 
+    dalam membedakan spesies. Terlihat bahwa tidak semua variabel memiliki pengaruh yang sama.</p>
+
+    <p><strong>Pivot Table</strong> menunjukkan bahwa jumlah data tiap spesies seimbang, 
+    masing-masing sebanyak 50 data.</p>
+</div>
+
+<div class="section">
+    <h2>5. Verify Data Quality</h2>
+    <ul>
+        <li>Tidak ada missing value</li>
+        <li>Tidak ada duplikasi mencolok</li>
+        <li>Format data konsisten</li>
+        <li>Dataset siap dianalisis</li>
+    </ul>
+
+    <p>
+        Dengan demikian dataset Iris memiliki kualitas yang baik untuk proses eksplorasi menggunakan Orange.
+    </p>
+</div>
+<div class="selection">
+    <h2>6. ekpolarasi  iris menggunakan orange</h2>
+    <div class="image-box">
+        <img src="orange.png" alt="orange">
+    </div>
+    <div class="image-box">
+        <img src="orange1.png" alt="orange1">
     </div>
 </div>
+<div class="section">
+    <h2>Rank (Pemeringkatan Atribut)</h2>
 
-              
-                
-<div id="searchbox"></div>
-                <article class="bd-article">
-                  
-  <section id="himpunan">
-<h1>HIMPUNAN<a class="headerlink" href="#himpunan" title="Link to this heading">#</a></h1>
-<section id="hukum-de-morgan">
-<h2>1. Hukum De Morgan<a class="headerlink" href="#hukum-de-morgan" title="Link to this heading">#</a></h2>
-<p>Hukum De Morgan adalahh impunan dan logika yang menggambarkan hubungan antara operasi gabungan (∪) dan irisan (∩) dengan komplemen. Hukum ini digunakan untuk membalikkan pernyataan himpunan atau logika secara akurat. Berikut adalah bentuk dari kedua hukum De Morgan:</p>
-<ol class="arabic simple">
-<li><p>Hukum De Morgan untuk HimpunanJika A dan B  adalah dua himpunan, maka Hukum De Morgan menyatakan:</p></li>
-</ol>
-<p><em>Komplemen dari gabungan dua himpunan:
-(A ∪ B)’ = A’ ∩ B’</em></p>
-<p><em>Komplemen dari irisan dua himpunan:
-(A ∩ B)’ = A’ ∪ B’</em></p>
-<ol class="arabic simple" start="2">
-<li><p>Hukum De Morgan untuk Logika
-Dalam konteks logika proposisional, Hukum De Morgan juga berlaku untuk operator logika. Jika  dan  adalah dua proposisi, maka:</p></li>
-</ol>
-<p>Negasi dari disjungsi (OR) dua proposisi
-Negasi dari konjungsi (AND) dua proposisi</p>
-<p>Contoh Penerapan Hukum De Morgan</p>
-<ol class="arabic simple">
-<li><p>Contoh Himpunan:
-Misalkan:
-A = {1, 2, 3}
-B = {3, 4, 5}
-Semesta S = {1, 2, 3, 4, 5, 6}
-Maka:
-A ∪ B = {1, 2, 3, 4, 5}
-A’ = {4, 5, 6}
-B’ = {1, 2, 6}
-(A ∪ B)’ = {6} = A’ ∩ B’
-Jadi, hukum De Morgan terbukti pada operasi himpunan ini.</p></li>
-<li><p>Contoh Logika:
-Jika P: “Saya belajar” dan Q: “Saya bekerja”.
-Maka:
-berarti “Saya tidak belajar dan tidak bekerja”.
-berarti “Saya tidak belajar atau tidak bekerja (salah satu atau keduanya)”.</p></li>
-</ol>
-</section>
-<section id="hukum-absorpsi-absorption-laws">
-<h2>2. Hukum Absorpsi (Absorption Laws)<a class="headerlink" href="#hukum-absorpsi-absorption-laws" title="Link to this heading">#</a></h2>
-<p>Hukum Absorpsi dalam aljabar himpunan dan logika merupakan hukum yang menunjukkan bagaimana operasi gabungan (∪) dan irisan (∩) berinteraksi dengan himpunan itu sendiri. Hukum ini memungkinkan penyederhanaan ekspresi himpunan atau logika.</p>
-<ol class="arabic simple">
-<li><p>Hukum Absorpsi dalam Himpunan</p></li>
-</ol>
-<p>Jika A dan B adalah dua himpunan, maka Hukum Absorpsi dinyatakan sebagai berikut:</p>
-<p>Gabungan dengan irisan:</p>
-<p>A ∪ (A ∩ B) = A</p>
-<p>Irisan dengan gabungan:</p>
-<p>A ∩ (A ∪ B) = A</p>
-<ol class="arabic simple" start="2">
-<li><p>Hukum Absorpsi dalam Logika</p></li>
-</ol>
-<p>Dalam konteks logika proposisional, Hukum Absorpsi juga berlaku untuk operator logika “OR” (atau, ∨) dan “AND” (dan, ∧). Jika  dan  adalah dua proposisi, maka Hukum Absorpsi menyatakan:</p>
-<p>Disjungsi (OR) dengan konjungsi (AND)</p>
-<p>Konjungsi (AND) dengan disjungsi (OR)</p>
-<p>Contoh Penerapan Hukum Absorpsi</p>
-<ol class="arabic simple">
-<li><p>Contoh Himpunan:
-Misalkan:</p></li>
-</ol>
-<p>A = {1, 2, 3}</p>
-<p>B = {3, 4, 5}</p>
-<p>Maka:</p>
-<p>A ∩ B = {3}</p>
-<p>A ∪ (A ∩ B) = {1, 2, 3} = A</p>
-<p>A ∩ (A ∪ B) = {1, 2, 3} = A</p>
-<ol class="arabic simple" start="2">
-<li><p>Contoh Logika:
-Jika P: “Saya belajar” dan Q: “Saya bekerja”.
-Maka:
-= “Saya belajar atau (Saya belajar dan bekerja)” yang akan selalu menghasilkan “Saya belajar”.
-= “Saya belajar dan (Saya belajar atau bekerja)” yang akan selalu menghasilkan “Saya belajar”.</p></li>
-</ol>
-</section>
-<section id="id1">
-<h2>2. Hukum Absorpsi (Absorption Laws)<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
-<p>Hukum Absorpsi dalam aljabar himpunan dan logika merupakan hukum yang menunjukkan bagaimana operasi gabungan (∪) dan irisan (∩) berinteraksi dengan himpunan itu sendiri. Hukum ini memungkinkan penyederhanaan ekspresi himpunan atau logika.</p>
-<ol class="arabic simple">
-<li><p>Hukum Absorpsi dalam Himpunan
-Jika A dan B adalah dua himpunan, maka Hukum Absorpsi dinyatakan sebagai berikut:</p></li>
-</ol>
-<p>Gabungan dengan irisan:
-A ∪ (A ∩ B) = A</p>
-<p>Irisan dengan gabungan:
-A ∩ (A ∪ B) = A</p>
-</section>
-<section id="complement-laws">
-<h2>3. Complement laws<a class="headerlink" href="#complement-laws" title="Link to this heading">#</a></h2>
-<p>Hukum komplemen (complement laws) adalah prinsip dasar dalam aljabar Boolean yang digunakan dalam logika digital, ilmu komputer, dan teori himpunan. Hukum ini melibatkan operasi dengan variabel logika seperti konjungsi (AND), disjungsi (OR), dan negasi (NOT).</p>
-<p>Dalam hukum komplemen, ada dua aturan utama:</p>
-<ol class="arabic simple">
-<li><p>A ∨ A’ = 1
-Artinya, hasil operasi OR antara suatu variabel Boolean (A) dengan komplemennya (A’) adalah 1 (benar). Ini mencerminkan bahwa salah satu dari A atau komplemennya pasti benar.</p></li>
-<li><p>A ∧ A’ = 0
-Artinya, hasil operasi AND antara suatu variabel Boolean (A) dengan komplemennya (A’) adalah 0 (salah). Ini mencerminkan bahwa A dan komplemennya tidak bisa benar bersamaan.</p></li>
-</ol>
-</section>
-</section>
+    <p>
+        Pada bagian <strong>Rank</strong>, dilakukan proses pemeringkatan atribut untuk melihat 
+        seberapa besar kontribusi masing-masing variabel dalam membedakan spesies bunga iris.
+    </p>
 
-    <script type="text/x-thebe-config">
-    {
-        requestKernel: true,
-        binderOptions: {
-            repo: "binder-examples/jupyter-stacks-datascience",
-            ref: "master",
-        },
-        codeMirrorConfig: {
-            theme: "abcdef",
-            mode: "python"
-        },
-        kernelOptions: {
-            name: "python3",
-            path: "./."
-        },
-        predefinedOutput: true
-    }
-    </script>
-    <script>kernelName = 'python3'</script>
+    <p>
+        Berdasarkan hasil yang diperoleh, urutan variabel dari yang paling berpengaruh adalah:
+    </p>
 
-                </article>
-              
+    <table>
+        <tr>
+            <th>Peringkat</th>
+            <th>Variabel</th>
+            <th>Tingkat Pengaruh</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>petal_length</td>
+            <td>Sangat Tinggi</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>petal_width</td>
+            <td>Tinggi</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>sepal_length</td>
+            <td>Sedang</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>sepal_width</td>
+            <td>Rendah</td>
+        </tr>
+    </table>
 
-              
-              
-              
-              
-                <footer class="prev-next-footer d-print-none">
-                  
-<div class="prev-next-area">
-    <a class="left-prev"
-       href="aljabar.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Aljabar boolean</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="LOGIKA.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">NEGASI</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
+    <p>
+        Variabel <strong>petal_length</strong> dan <strong>petal_width</strong> menempati 
+        peringkat tertinggi, yang menunjukkan bahwa kedua atribut tersebut memiliki peranan 
+        paling signifikan dalam proses klasifikasi jenis bunga iris.
+    </p>
+
+    <p>
+        Sebaliknya, <strong>sepal_width</strong> berada pada peringkat terendah sehingga 
+        pengaruhnya terhadap pembedaan spesies relatif kecil.
+    </p>
+
+    <p>
+        Dengan demikian, dapat disimpulkan bahwa karakteristik pada 
+        <strong>mahkota bunga (petal)</strong> lebih dominan dibandingkan 
+        <strong>kelopak bunga (sepal)</strong> dalam menentukan perbedaan antar spesies iris.
+    </p>
 </div>
-                </footer>
-              
-            </div>
-            
-            
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+<div class="image-box">
+    <img src="orange2.png" alt="Scatter Plot Iris">
+</div>
+<div class="image-box">
+    <img src="orange3.png" alt="Scatter Plot Iris">
+</div>
+<div class="image-box">
+    <img src="orange4.png" alt="Scatter Plot Iris">
+</div>
+<div class="image-box">
+    <img src="orange5.png" alt="Scatter Plot Iris">
+</div>
+<div class="image-box">
+    <img src="orange6.png" alt="Scatter Plot Iris">
+</div>
+<div class="image-box">
+    <img src="orange7.png" alt="Scatter Plot Iris">
+</div>
+<div class="image-box">
+    <img src="orange8.png" alt="Scatter Plot Iris">
+</div>
+<div class="section">
+    <h2>Eksplorasi Dataset Iris Menggunakan Orange</h2>
+
+    <p>
+        Pada tahap eksplorasi menggunakan aplikasi <strong>Orange</strong>, dataset Iris digunakan sebagai objek analisis.
+        Berdasarkan tampilan pada <strong>Data Table</strong>, dataset ini terdiri dari <strong>150 baris data</strong> 
+        dan <strong>5 atribut</strong>. Seluruh data terisi lengkap tanpa adanya missing value sehingga data siap 
+        digunakan untuk proses analisis lebih lanjut.
+    </p>
+
+    <p>
+        Dataset Iris memiliki empat atribut numerik, yaitu:
+    </p>
+
+    <ul>
+        <li>sepal_length (panjang kelopak)</li>
+        <li>sepal_width (lebar kelopak)</li>
+        <li>petal_length (panjang mahkota)</li>
+        <li>petal_width (lebar mahkota)</li>
+    </ul>
+
+    <p>
+        Selain itu terdapat satu atribut kategorikal yaitu <strong>species</strong> yang menunjukkan jenis bunga iris:
+        <strong>Iris-setosa</strong>, <strong>Iris-versicolor</strong>, dan <strong>Iris-virginica</strong>.
+    </p>
+
+    <p>
+        Setiap baris data merepresentasikan satu sampel bunga beserta ukuran bagian-bagiannya dan label spesiesnya.
+        Dataset ini sering digunakan dalam pembelajaran machine learning, khususnya untuk kasus klasifikasi,
+        karena strukturnya rapi, mudah dipahami, dan tidak mengandung data kosong.
+    </p>
+</div>
 
 
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hukum-de-morgan">1. Hukum De Morgan</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hukum-absorpsi-absorption-laws">2. Hukum Absorpsi (Absorption Laws)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2. Hukum Absorpsi (Absorption Laws)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#complement-laws">3. Complement laws</a></li>
+<div class="section">
+    <h2>Visualisasi Scatter Plot</h2>
+
+    <p>
+        Pada tahap visualisasi data menggunakan fitur <strong>Scatter Plot</strong> di Orange,
+        dilakukan perbandingan antara dua variabel, yaitu <strong>petal_length</strong> (sumbu X)
+        dan <strong>petal_width</strong> (sumbu Y).
+    </p>
+
+    <p>
+        Setiap titik pada grafik merepresentasikan satu sampel bunga iris.
+        Perbedaan warna digunakan untuk membedakan kategori spesies.
+    </p>
+
+    <p>
+        Berdasarkan visualisasi, kelompok <strong>Iris-setosa</strong> terpisah sangat jelas dari dua spesies lainnya.
+        Hal ini menunjukkan bahwa ukuran mahkota bunga pada Iris-setosa berbeda cukup signifikan.
+    </p>
+
+    <p>
+        Sementara itu, <strong>Iris-versicolor</strong> dan <strong>Iris-virginica</strong>
+        masih memiliki beberapa titik yang berdekatan, namun pemisahannya lebih jelas dibandingkan
+        jika menggunakan variabel sepal.
+    </p>
+
+    <p>
+        Visualisasi ini menunjukkan bahwa variabel pada bagian <strong>petal</strong>
+        lebih efektif dalam membantu membedakan spesies bunga iris.
+    </p>
+</div>
+
+
+<div class="section">
+    <h2>Analisis Correlations</h2>
+
+    <p>
+        Pada tahap analisis menggunakan fitur <strong>Correlations</strong> di Orange,
+        dihitung hubungan antar variabel numerik menggunakan metode <strong>Pearson correlation</strong>.
+    </p>
+
+    <p>
+        Nilai korelasi berada pada rentang -1 sampai +1:
+    </p>
+
+    <ul>
+        <li>Nilai mendekati +1 menunjukkan hubungan positif yang kuat.</li>
+        <li>Nilai mendekati -1 menunjukkan hubungan negatif.</li>
+        <li>Nilai mendekati 0 menunjukkan hubungan yang lemah.</li>
+    </ul>
+
+    <p>
+        Berdasarkan hasil analisis:
+    </p>
+
+    <ul>
+        <li>petal_length dan petal_width memiliki korelasi sangat tinggi (~ +0.963)</li>
+        <li>petal_length dan sepal_length memiliki korelasi kuat (~ +0.872)</li>
+        <li>petal_width dan sepal_length memiliki korelasi cukup kuat (~ +0.818)</li>
+        <li>sepal_length dan sepal_width memiliki korelasi sangat lemah (~ -0.109)</li>
+    </ul>
+
+    <p>
+        Dapat disimpulkan bahwa variabel pada bagian <strong>petal</strong> memiliki keterkaitan
+        yang lebih kuat dibandingkan variabel sepal, sehingga lebih informatif dalam membedakan spesies iris.
+    </p>
+</div>
+
+
+<div class="section">
+    <h2>Box Plot</h2>
+
+    <p>
+        Pada tampilan <strong>Box Plot</strong>, ditunjukkan penyebaran data untuk variabel
+        <strong>petal_length</strong>.
+    </p>
+
+    <p>
+        Grafik menampilkan nilai minimum, maksimum, median, dan rata-rata.
+        Nilai rata-rata panjang petal berada di sekitar <strong>3.76</strong>,
+        dengan sebaran data yang cukup lebar.
+    </p>
+
+    <p>
+        Box Plot membantu memahami distribusi data, tingkat variasi,
+        serta mendeteksi kemungkinan outlier.
+        Berdasarkan grafik, panjang mahkota memiliki variasi cukup besar
+        namun masih dalam rentang yang wajar.
+    </p>
+</div>
+
+
+<div class="section">
+    <h2>Column Statistics</h2>
+
+    <p>
+        Pada bagian <strong>Column Statistics</strong>, ditampilkan ringkasan statistik
+        dari masing-masing variabel, meliputi:
+    </p>
+
+    <ul>
+        <li>Mean (rata-rata)</li>
+        <li>Median</li>
+        <li>Mode</li>
+        <li>Minimum dan maksimum</li>
+        <li>Dispersion (tingkat penyebaran)</li>
+        <li>Missing value</li>
+    </ul>
+
+    <p>
+        Seluruh data berada dalam kondisi lengkap tanpa missing value (0%).
+        Variabel pada bagian petal menunjukkan variasi yang lebih besar
+        dibandingkan variabel sepal.
+    </p>
+
+    <p>
+        Informasi ini membantu memberikan gambaran awal kondisi dataset
+        sebelum dilakukan analisis lanjutan.
+    </p>
+</div>
+
+
+<div class="section">
+    <h2>Pivot Table</h2>
+
+    <p>
+        Pada bagian <strong>Pivot Table</strong>, ditampilkan distribusi jumlah data
+        untuk setiap spesies bunga iris.
+    </p>
+
+    <table>
+        <tr>
+            <th>Species</th>
+            <th>Jumlah Data</th>
+        </tr>
+        <tr>
+            <td>Iris-setosa</td>
+            <td>50</td>
+        </tr>
+        <tr>
+            <td>Iris-versicolor</td>
+            <td>50</td>
+        </tr>
+        <tr>
+            <td>Iris-virginica</td>
+            <td>50</td>
+        </tr>
+    </table>
+
+    <p>
+        Total keseluruhan berjumlah <strong>150 data</strong>.
+        Kondisi ini menunjukkan bahwa dataset Iris memiliki distribusi kelas yang seimbang.
+    </p>
+
+    <p>
+        Distribusi kelas yang seimbang sangat menguntungkan dalam proses klasifikasi
+        karena tidak ada satu kelas yang mendominasi model.
+    </p>
+</div>
+
+
+<h2>1. Informasi Dataset</h2>
+<ul>
+<li>Jumlah Data: 150</li>
+<li>Jumlah Variabel: 5</li>
+<li>Tidak ada missing value</li>
+<li>Distribusi kelas seimbang (50 data per spesies)</li>
 </ul>
-  </nav></div>
 
-</div></div>
+<div class="image-box">
+    <img src="scater.png" alt="Scatter Plot Iris">
+</div>
+
+<p>
+Berdasarkan visualisasi di atas, terlihat bahwa:
+</p>
+<ul>
+<li>Iris-setosa terpisah sangat jelas dari dua spesies lainnya.</li>
+<li>Iris-versicolor dan Iris-virginica masih memiliki beberapa titik berdekatan.</li>
+<li>Variabel petal_length dan petal_width sangat efektif dalam membedakan spesies.</li>
+</ul>
+
+<h2>3. Matriks Korelasi</h2>
+
+<table>
+<tr>
+<th></th>
+<th>Sepal Length</th>
+<th>Sepal Width</th>
+<th>Petal Length</th>
+<th>Petal Width</th>
+</tr>
+<tr><td>Sepal Length</td><td>1.000</td><td>-0.109</td><td>0.872</td><td>0.818</td></tr>
+<tr><td>Sepal Width</td><td>-0.109</td><td>1.000</td><td>-0.421</td><td>-0.357</td></tr>
+<tr><td>Petal Length</td><td>0.872</td><td>-0.421</td><td>1.000</td><td>0.963</td></tr>
+<tr><td>Petal Width</td><td>0.818</td><td>-0.357</td><td>0.963</td><td>1.000</td></tr>
+</table>
+
+<h2>4. Statistik Deskriptif</h2>
+
+<table>
+<tr>
+<th>Variabel</th>
+<th>Mean</th>
+<th>Median</th>
+<th>Modus</th>
+<th>Std Dev</th>
+<th>Min</th>
+<th>Max</th>
+</tr>
+<tr><td>Sepal Length</td><td>5.843</td><td>5.8</td><td>5.0</td><td>0.828</td><td>4.3</td><td>7.9</td></tr>
+<tr><td>Sepal Width</td><td>3.054</td><td>3.0</td><td>3.0</td><td>0.434</td><td>2.0</td><td>4.4</td></tr>
+<tr><td>Petal Length</td><td>3.759</td><td>4.35</td><td>1.5</td><td>1.764</td><td>1.0</td><td>6.9</td></tr>
+<tr><td>Petal Width</td><td>1.199</td><td>1.3</td><td>0.2</td><td>0.763</td><td>0.1</td><td>2.5</td></tr>
+</table>
+
+<h2>5. Ranking Variabel</h2>
+<ol>
+<li>Petal Length (Paling berpengaruh)</li>
+<li>Petal Width</li>
+<li>Sepal Length</li>
+<li>Sepal Width (Paling rendah)</li>
+</ol>
+
+<h2>6. Pivot Table (Distribusi Spesies)</h2>
+
+<table>
+<tr><th>Spesies</th><th>Jumlah Data</th></tr>
+<tr><td>Iris-setosa</td><td>50</td></tr>
+<tr><td>Iris-versicolor</td><td>50</td></tr>
+<tr><td>Iris-virginica</td><td>50</td></tr>
+</table>
+
+</div>
+<h2>Hasil Perhitungan Statistik Data IRIS</h2>
+
+<p>
+Berikut hasil perhitungan <b>mean</b> (rata-rata), 
+<b>median</b> (nilai tengah), dan 
+<b>modus</b> (nilai yang paling sering muncul) dari data numerik pada file IRIS:
+</p>
+
+<h3>Sepal Length</h3>
+<ul>
+    <li>Mean: 5.8433</li>
+    <li>Median: 5.80</li>
+    <li>Modus: 5.0</li>
+</ul>
+
+<h3>Sepal Width</h3>
+<ul>
+    <li>Mean: 3.0540</li>
+    <li>Median: 3.00</li>
+    <li>Modus: 3.0</li>
+</ul>
+
+<h3>Petal Length</h3>
+<ul>
+    <li>Mean: 3.7587</li>
+    <li>Median: 4.35</li>
+    <li>Modus: 1.5</li>
+</ul>
+
+<h3>Petal Width</h3>
+<ul>
+    <li>Mean: 1.1987</li>
+    <li>Median: 1.30</li>
+    <li>Modus: 0.2</li>
+</ul>
               
             
           </div>
