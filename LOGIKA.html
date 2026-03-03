@@ -424,7 +424,7 @@ document.write(`
 <div class="container">
 
 <div class="section">
-    <h2>7. Perhitungan Jarak (Euclidean Distance)</h2>
+    <h2>Perhitungan Jarak (Euclidean Distance)</h2>
 
     <p>
         Pada tahap <strong>Data Understanding</strong>, dilakukan perhitungan jarak antar data
@@ -525,6 +525,133 @@ document.write(`
     <p>
         Dengan demikian, perhitungan jarak membantu memahami pola kemiripan
         antar data sebelum dilakukan proses pemodelan lebih lanjut.
+    </p>
+
+</div>
+<div class="section">
+    <h2>Perhitungan Jarak Data Campuran (Numerik, Ordinal, Kategorikal, Biner)</h2>
+
+    <h3>1. Pengertian</h3>
+    <p>
+        Pada analisis ini digunakan data campuran yang terdiri dari beberapa tipe variabel,
+        yaitu numerik, ordinal, kategorikal, dan biner. Karena tipe data berbeda,
+        maka metode Euclidean Distance tidak lagi sesuai digunakan secara langsung.
+        Oleh karena itu digunakan metode <strong>Gower Distance</strong>,
+        yang mampu menghitung jarak untuk data dengan tipe campuran.
+    </p>
+
+    <h3>2. Pembentukan Data Campuran dari Dataset Iris</h3>
+
+    <p>
+        Dataset Iris asli memiliki 4 variabel numerik dan 1 kategorikal (species).
+        Untuk keperluan analisis data campuran, dilakukan transformasi sebagai berikut:
+    </p>
+
+    <ul>
+        <li><strong>Numerik:</strong> sepal_length</li>
+        <li><strong>Numerik:</strong> petal_length</li>
+        <li><strong>Ordinal:</strong> ukuran petal (Pendek=1, Sedang=2, Panjang=3)</li>
+        <li><strong>Kategorikal:</strong> species</li>
+        <li><strong>Biner:</strong> petal_width &gt; 1.0 (Ya=1, Tidak=0)</li>
+    </ul>
+
+    <p>
+        Variabel ordinal dibuat dengan mengelompokkan panjang petal menjadi 3 kategori:
+    </p>
+
+    <ul>
+        <li>Petal Length &lt; 2.5 → Pendek (1)</li>
+        <li>2.5 – 5.0 → Sedang (2)</li>
+        <li>&gt; 5.0 → Panjang (3)</li>
+    </ul>
+
+    <h3>3. Rumus Gower Distance</h3>
+
+    <p>
+        Gower Distance menghitung jarak dengan menyesuaikan setiap tipe variabel,
+        kemudian dirata-ratakan:
+    </p>
+
+    <p>
+        D(i,j) = (1/p) × Σ d<sub>ij</sub>
+    </p>
+
+    <p>
+        Dimana:
+    </p>
+
+    <ul>
+        <li>Numerik → dihitung berdasarkan selisih yang dinormalisasi</li>
+        <li>Ordinal → dikonversi menjadi skala 0–1</li>
+        <li>Kategorikal → 0 jika sama, 1 jika berbeda</li>
+        <li>Biner → 0 jika sama, 1 jika berbeda</li>
+    </ul>
+
+    <h3>4. Contoh Perhitungan</h3>
+
+    <p>
+        Misalnya dibandingkan Data ke-1 dan Data ke-2:
+    </p>
+
+    <table>
+        <tr>
+            <th>Variabel</th>
+            <th>Data 1</th>
+            <th>Data 2</th>
+            <th>Perhitungan</th>
+        </tr>
+        <tr>
+            <td>Sepal Length (Numerik)</td>
+            <td>5.1</td>
+            <td>4.9</td>
+            <td>Selisih dinormalisasi</td>
+        </tr>
+        <tr>
+            <td>Petal Category (Ordinal)</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0 (sama)</td>
+        </tr>
+        <tr>
+            <td>Species (Kategorikal)</td>
+            <td>Setosa</td>
+            <td>Setosa</td>
+            <td>0 (sama)</td>
+        </tr>
+        <tr>
+            <td>Petal Width Binary</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0 (sama)</td>
+        </tr>
+    </table>
+
+    <p>
+        Setelah seluruh komponen dihitung dan dirata-ratakan,
+        diperoleh nilai jarak total yang menunjukkan tingkat kemiripan antar data.
+    </p>
+
+    <h3>5. Analisis</h3>
+
+    <p>
+        Hasil perhitungan menunjukkan bahwa data yang berasal dari spesies yang sama
+        cenderung memiliki nilai jarak lebih kecil dibandingkan dengan spesies yang berbeda.
+        Variabel kategorikal dan biner membantu mempertegas perbedaan antar kelas,
+        sementara variabel numerik dan ordinal memberikan informasi tingkat variasi ukuran.
+    </p>
+
+    <h3>Kesimpulan</h3>
+
+    <p>
+        Pada data dengan tipe campuran (numerik, ordinal, kategorikal, dan biner),
+        metode Gower Distance lebih sesuai dibandingkan Euclidean Distance.
+        Hal ini karena Gower mampu menangani berbagai tipe variabel secara bersamaan
+        tanpa menghilangkan informasi penting dari masing-masing tipe data.
+    </p>
+
+    <p>
+        Dengan menggunakan pendekatan ini, analisis kemiripan antar data menjadi
+        lebih akurat dan representatif terhadap kondisi sebenarnya.
     </p>
 
 </div>
