@@ -654,95 +654,114 @@ document.write(`
 
     <div style="margin-top:40px">
 
-    <h2>Perhitungan Jarak Data Campuran</h2>
-    <p>Contoh perhitungan jarak antara Data 1 dan Data 2 menggunakan metode jarak data campuran.</p>
+    <div style="margin-top:40px">
+
+    <h2>Perhitungan Jarak Data 1 Terhadap Data 2–10</h2>
+    <p>Menggunakan jarak data campuran (numerik, ordinal, kategorikal, biner).</p>
     
-    <table border="1" cellpadding="10" cellspacing="0" style="border-collapse:collapse; width:100%">
-    <thead style="background:#1976d2;color:white;">
+    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;width:100%">
+    <thead style="background:#1976d2;color:white">
     <tr>
-    <th>Atribut</th>
-    <th>Tipe Data</th>
-    <th>Data 1</th>
-    <th>Data 2</th>
-    <th>Cara Perhitungan</th>
-    <th>Hasil</th>
+    <th>Perbandingan</th>
+    <th>Perhitungan Numerik 1</th>
+    <th>Perhitungan Numerik 2</th>
+    <th>Ordinal</th>
+    <th>Kategori</th>
+    <th>Biner</th>
+    <th>Total Jarak</th>
     </tr>
     </thead>
     
     <tbody>
     
     <tr>
-    <td>Sepal Length</td>
-    <td>Numerik</td>
-    <td>5.1</td>
-    <td>4.9</td>
-    <td>
-    |5.1 - 4.9| / (7.9 - 4.3) <br>
-    = 0.2 / 3.6
-    </td>
-    <td>0.0556</td>
+    <td>Data1 - Data2</td>
+    <td>|5.1-4.9|/3.6 = 0.0556</td>
+    <td>|3.5-3.0|/2.4 = 0.2083</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>(0.0556+0.2083)/5 = <b>0.0528</b></td>
     </tr>
     
     <tr>
-    <td>Sepal Width</td>
-    <td>Numerik</td>
-    <td>3.5</td>
-    <td>3.0</td>
-    <td>
-    |3.5 - 3.0| / (4.4 - 2.0) <br>
-    = 0.5 / 2.4
-    </td>
-    <td>0.2083</td>
+    <td>Data1 - Data3</td>
+    <td>|5.1-4.7|/3.6 = 0.1111</td>
+    <td>|3.5-3.2|/2.4 = 0.125</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>(0.1111+0.125)/5 = <b>0.0472</b></td>
     </tr>
     
     <tr>
-    <td>Panjang Kelopak</td>
-    <td>Ordinal</td>
-    <td>Pendek (1)</td>
-    <td>Pendek (1)</td>
-    <td>
-    |1 - 1| / (m - 1) <br>
-    m = jumlah level ordinal <br>
-    = 0 / 1
-    </td>
+    <td>Data1 - Data4</td>
+    <td>|5.1-4.6|/3.6 = 0.1389</td>
+    <td>|3.5-3.1|/2.4 = 0.1667</td>
     <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>(0.1389+0.1667)/5 = <b>0.0611</b></td>
     </tr>
     
     <tr>
-    <td>Species</td>
-    <td>Kategorikal</td>
-    <td>setosa</td>
-    <td>setosa</td>
-    <td>
-    Jika sama = 0 <br>
-    Jika berbeda = 1
-    </td>
+    <td>Data1 - Data5</td>
+    <td>|5.1-5.0|/3.6 = 0.0278</td>
+    <td>|3.5-3.6|/2.4 = 0.0417</td>
     <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>(0.0278+0.0417)/5 = <b>0.0139</b></td>
     </tr>
     
     <tr>
-    <td>Status</td>
-    <td>Biner</td>
+    <td>Data1 - Data6</td>
+    <td>|5.1-5.4|/3.6 = 0.0833</td>
+    <td>|3.5-3.9|/2.4 = 0.1667</td>
     <td>0</td>
     <td>0</td>
-    <td>
-    Jika sama = 0 <br>
-    Jika berbeda = 1
-    </td>
     <td>0</td>
+    <td>(0.0833+0.1667)/5 = <b>0.0500</b></td>
     </tr>
     
-    <tr style="background:black;font-weight:bold">
-    <td colspan="5">
-    Total Jarak (Rata-rata semua atribut) <br><br>
+    <tr>
+    <td>Data1 - Data7</td>
+    <td>|5.1-4.6|/3.6 = 0.1389</td>
+    <td>|3.5-3.4|/2.4 = 0.0417</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>(0.1389+0.0417)/5 = <b>0.0361</b></td>
+    </tr>
     
-    D = (d1 + d2 + d3 + d4 + d5) / jumlah atribut <br>
+    <tr>
+    <td>Data1 - Data8</td>
+    <td>|5.1-5.0|/3.6 = 0.0278</td>
+    <td>|3.5-3.4|/2.4 = 0.0417</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>(0.0278+0.0417)/5 = <b>0.0139</b></td>
+    </tr>
     
-    D = (0.0556 + 0.2083 + 0 + 0 + 0) / 5 <br>
+    <tr>
+    <td>Data1 - Data9</td>
+    <td>|5.1-4.4|/3.6 = 0.1944</td>
+    <td>|3.5-2.9|/2.4 = 0.2500</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>(0.1944+0.2500)/5 = <b>0.0889</b></td>
+    </tr>
     
-    D = 0.2639 / 5
-    </td>
-    <td>0.0528</td>
+    <tr>
+    <td>Data1 - Data10</td>
+    <td>|5.1-4.9|/3.6 = 0.0556</td>
+    <td>|3.5-3.1|/2.4 = 0.1667</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>(0.0556+0.1667)/5 = <b>0.0444</b></td>
     </tr>
     
     </tbody>
