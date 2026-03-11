@@ -181,24 +181,14 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="Algoritma.html">Algoritma dari sequrential search dan binary search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aljabar.html">Aljabar boolean</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="Himpunan.html">HIMPUNAN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="LOGIKA.html">NEGASI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aljabar.html">penjelasan pendata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Algoritma.html">data iris</a></li>
 
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="Centrality%20graph.html">Social Network Analysis</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="PR_UNTUK_DERET.html">pr</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Naive_bayes.html">Pengertian naive bayes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="DERET_REKURSI.html">12
-(deret geometri)
-(deret aritmetika)
-13</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">UAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Himpunan.html">data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LOGIKA.html">Jarak</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DERET_REKURSI.html">KNN</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Contoh soal mencari data missing</a></li>
 </ul>
 
     </div>
@@ -384,103 +374,264 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>UAS</h1>
-    <!-- Table of contents -->
-    <div id="print-main-content">
-        <div id="jb-print-toc">
-            
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1.</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#melihat-dari-jarak">2. MELIHAT DARI JARAK</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#closeness-centrality-b-jumlah-node-1-total-jarak-terpendek-dalam-setiap-node">closeness centrality B  =(jumlah node -1)/(total jarak terpendek dalam setiap node)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#betwenes-centralitiy-b-jumlah-kontribusi-b-total-jalur-terpendek">betwenes centralitiy B = (jumlah kontribusi B)/(total jalur terpendek)</a></li>
-</ul>
-</li>
-</ul>
-            </nav>
-        </div>
-    </div>
-</div>
+<section style="font-family:Arial;padding:20px">
 
-              
-                
-<div id="searchbox"></div>
-                <article class="bd-article">
-                  
-  <section class="tex2jax_ignore mathjax_ignore" id="uas">
-<h1>UAS<a class="headerlink" href="#uas" title="Link to this heading">#</a></h1>
-<section id="id1">
-<h2>1.<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{array}{c|c|c|c|cc}P&amp;Q&amp;R&amp;S\ &amp;P\to\ Q&amp;R-&gt;S \  &amp;P\to\ Q -&gt;&amp;R-&gt;S\\\hline\text{Т}&amp;\text{Т}&amp;\text{Т}&amp;\text{T}&amp;\text{T}&amp;\text{T}&amp;\text{T}\\\text{Т}&amp;\text{Т}&amp;\text{F}&amp;\text{T}&amp;\text{T}&amp;\text{T}&amp;\text{T}\\\text{T}&amp;\text{F}&amp;\text{T}&amp;\text{F}&amp;\text{F}&amp;\text{F}&amp;\text{T}\\\text{T}&amp;\text{F}&amp;\text{F}&amp;\text{F}&amp;\text{F}&amp;\text{T}&amp;\text{T}\\\text{F}&amp;\text{T}&amp;\text{T}&amp;\text{T}&amp;\text{T}&amp;\text{T}&amp;\text{T}\\\text{F}&amp;\text{T}&amp;\text{F}&amp;\text{T}&amp;\text{T}&amp;\text{T}&amp;\text{T}\\\text{F}&amp;\text{F}&amp;\text{T}&amp;\text{F}&amp;\text{T}&amp;\text{F}&amp;\text{F}\\\text{F}&amp;\text{F}&amp;\text{F}&amp;\text{F}&amp;\text{T}&amp;\text{T}&amp;\text{T}\text{}\end{array}\end{split}\]</div>
-</section>
-<section id="melihat-dari-jarak">
-<h2>2. MELIHAT DARI JARAK<a class="headerlink" href="#melihat-dari-jarak" title="Link to this heading">#</a></h2>
-<p>MELIHAT DARI A-B (dalam bentuk tabel)</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>a-&gt;b = 1</p></th>
-<th class="head"><p>melewati a,b</p></th>
+<h2>Perhitungan KNN untuk Mengisi Data Kosong</h2>
+
+<h3>1. Data Awal</h3>
+<table border="1" cellpadding="8">
+<tr>
+<th>No</th><th>IPK</th><th>PO</th><th>ML</th>
 </tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>a-&gt;c = 1</p></td>
-<td><p>melewati a,c</p></td>
-</tr>
-<tr class="row-odd"><td><p>a-&gt;d = 1</p></td>
-<td><p>melewati a,d</p></td>
-</tr>
-<tr class="row-even"><td><p>a-&gt;e = 2</p></td>
-<td><p>melewati (a,b,e)/(a,c,e)</p></td>
-</tr>
-<tr class="row-odd"><td><p>a-&gt;f = 2</p></td>
-<td><p>melewati (a,c,f)/(a,d,f)</p></td>
-</tr>
-</tbody>
+<tr><td>1</td><td>2</td><td>200000</td><td>2</td></tr>
+<tr><td>2</td><td>3</td><td>300000</td><td>3</td></tr>
+<tr><td>3</td><td>4</td><td>200000</td><td>2</td></tr>
+<tr><td>4</td><td>2</td><td>200000</td><td>3</td></tr>
+<tr><td>5</td><td>3</td><td>300000</td><td>2</td></tr>
+<tr><td>6</td><td>4</td><td>400000</td><td>3</td></tr>
+<tr style="background:yellow"><td>7</td><td>2</td><td>300000</td><td>?</td></tr>
 </table>
-</div>
-<p>soal:</p>
-<ul class="simple">
-<li><p>Hitunglah beetwenes central B</p></li>
-<li><p>Hitunglah closemen centrality F</p></li>
-</ul>
-<p>jawab:</p>
-<section id="closeness-centrality-b-jumlah-node-1-total-jarak-terpendek-dalam-setiap-node">
-<h3>closeness centrality B  =(jumlah node -1)/(total jarak terpendek dalam setiap node)<a class="headerlink" href="#closeness-centrality-b-jumlah-node-1-total-jarak-terpendek-dalam-setiap-node" title="Link to this heading">#</a></h3>
-</section>
-<section id="betwenes-centralitiy-b-jumlah-kontribusi-b-total-jalur-terpendek">
-<h3>betwenes centralitiy B = (jumlah kontribusi B)/(total jalur terpendek)<a class="headerlink" href="#betwenes-centralitiy-b-jumlah-kontribusi-b-total-jalur-terpendek" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>jumlah node pada graph adalah(a,b,c,d,e,f)=6
-total keseluruhan jarak terpendek pada setiap node adalah:
-a-&gt;b=1
-c-&gt;b=2
-d-&gt;b=2
-e-&gt;b=1
-f-&gt;b=2
-total keselurahan jarak terpendek antar not ke b=8</p></li>
-</ul>
-<p>maka sesuai rumus:
-closeness centrality B  =(jumlah node -1)/(total jarak terpendek dalam setiap node)
-closeness centrality B  =(6-1)/(8)
-closeness centrality B  =5/8</p>
-<p>jadi closenes centrality B=5/8</p>
-<ul class="simple">
-<li><p>Hitunglah beetwenes central B</p></li>
-</ul>
-<p>jarak terpendek yang melibatkan b hanya 1 yakni a-&gt;e
-selain itu tidak melibatakan b.
-kontribusi b dalam a-&gt;e = 1 dari 2 jalur terpendek.</p>
-<p>betwenes centralitiy B = (jumlah kontribusi B)/(total jalur terpendek)
-betwenes centralitiy B = (1)/(2)
-betwenes centralitiy B = 0,5</p>
-<p>jadi betwenes centrality B adalah 0,5</p>
-</section>
-</section>
+
+<p>Data ke-7 memiliki nilai ML kosong sehingga diprediksi menggunakan metode <b>KNN</b>.</p>
+
+<hr>
+
+<h3>2. Normalisasi Min-Max</h3>
+
+<p><b>Rumus Normalisasi:</b></p>
+
+<p>
+X' = (X − Xmin) / (Xmax − Xmin)
+</p>
+
+<h4>Nilai Minimum dan Maximum</h4>
+
+<table border="1" cellpadding="8">
+<tr>
+<th>Variabel</th><th>Min</th><th>Max</th>
+</tr>
+<tr>
+<td>IPK</td><td>2</td><td>4</td>
+</tr>
+<tr>
+<td>PO</td><td>200000</td><td>400000</td>
+</tr>
+<tr>
+<td>ML</td><td>2</td><td>3</td>
+</tr>
+</table>
+
+<h4>Contoh Perhitungan</h4>
+
+<p><b>Data 1 IPK</b></p>
+
+<p>
+(2 − 2) / (4 − 2) = 0
+</p>
+
+<p><b>Data 2 IPK</b></p>
+
+<p>
+(3 − 2) / (4 − 2) = 0.5
+</p>
+
+<p><b>Data 3 IPK</b></p>
+
+<p>
+(4 − 2) / (4 − 2) = 1
+</p>
+
+<h4>Hasil Normalisasi</h4>
+
+<table border="1" cellpadding="8">
+<tr>
+<th>No</th><th>IPK</th><th>PO</th><th>ML</th>
+</tr>
+
+<tr><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>0.5</td><td>0.5</td><td>1</td></tr>
+<tr><td>3</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>5</td><td>0.5</td><td>0.5</td><td>0</td></tr>
+<tr><td>6</td><td>1</td><td>1</td><td>1</td></tr>
+<tr style="background:yellow"><td>7</td><td>0</td><td>0.5</td><td>?</td></tr>
+
+</table>
+
+<hr>
+
+<h3>3. Perhitungan Jarak Euclidean</h3>
+
+<p><b>Rumus:</b></p>
+
+<p>
+d = √((x1−x2)² + (y1−y2)²)
+</p>
+
+<p>Data yang dicari = (0 , 0.5)</p>
+
+<table border="1" cellpadding="8">
+<tr>
+<th>Data</th>
+<th>Perhitungan</th>
+<th>Jarak</th>
+</tr>
+
+<tr>
+<td>D1</td>
+<td>√((0-0)² + (0.5-0)²)</td>
+<td>0.5</td>
+</tr>
+
+<tr>
+<td>D2</td>
+<td>√((0-0.5)² + (0.5-0.5)²)</td>
+<td>0.5</td>
+</tr>
+
+<tr>
+<td>D3</td>
+<td>√((0-1)² + (0.5-0)²)</td>
+<td>1.118</td>
+</tr>
+
+<tr>
+<td>D4</td>
+<td>√((0-0)² + (0.5-0)²)</td>
+<td>0.5</td>
+</tr>
+
+<tr>
+<td>D5</td>
+<td>√((0-0.5)² + (0.5-0.5)²)</td>
+<td>0.5</td>
+</tr>
+
+<tr>
+<td>D6</td>
+<td>√((0-1)² + (0.5-1)²)</td>
+<td>1.118</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h3>4. Urutan Jarak Terdekat</h3>
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>Data</th>
+<th>Jarak</th>
+<th>ML</th>
+</tr>
+
+<tr><td>1</td><td>0.5</td><td>0</td></tr>
+<tr><td>2</td><td>0.5</td><td>1</td></tr>
+<tr><td>4</td><td>0.5</td><td>1</td></tr>
+<tr><td>5</td><td>0.5</td><td>0</td></tr>
+<tr><td>3</td><td>1.118</td><td>0</td></tr>
+<tr><td>6</td><td>1.118</td><td>1</td></tr>
+
+</table>
+
+<hr>
+
+<h3>5. Menentukan Nilai K</h3>
+
+<p>
+Biasanya K dipilih bilangan ganjil.
+</p>
+
+<p>
+K = 3
+</p>
+
+<hr>
+
+<h3>6. Voting KNN</h3>
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>Data</th>
+<th>ML</th>
+</tr>
+
+<tr><td>1</td><td>0</td></tr>
+<tr><td>2</td><td>1</td></tr>
+<tr><td>4</td><td>1</td></tr>
+
+</table>
+
+<p>
+Voting mayoritas = <b>1</b>
+</p>
+
+<hr>
+
+<h3>7. Denormalisasi</h3>
+
+<p>
+ML asli:
+</p>
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>Nilai Asli</th>
+<th>Normalisasi</th>
+</tr>
+
+<tr>
+<td>2</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>1</td>
+</tr>
+
+</table>
+
+<p>
+Hasil voting = 1
+</p>
+
+<p>
+Maka nilai asli = <b>3</b>
+</p>
+
+<hr>
+
+<h3>8. Hasil Akhir</h3>
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>No</th>
+<th>IPK</th>
+<th>PO</th>
+<th>ML</th>
+</tr>
+
+<tr><td>1</td><td>2</td><td>200000</td><td>2</td></tr>
+<tr><td>2</td><td>3</td><td>300000</td><td>3</td></tr>
+<tr><td>3</td><td>4</td><td>200000</td><td>2</td></tr>
+<tr><td>4</td><td>2</td><td>200000</td><td>3</td></tr>
+<tr><td>5</td><td>3</td><td>300000</td><td>2</td></tr>
+<tr><td>6</td><td>4</td><td>400000</td><td>3</td></tr>
+<tr style="background:lightgreen">
+<td>7</td>
+<td>2</td>
+<td>300000</td>
+<td><b>3</b></td>
+</tr>
+
+</table>
+
 </section>
 
     <script type="text/x-thebe-config">
