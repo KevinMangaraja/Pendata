@@ -370,6 +370,67 @@ document.write(`
   
 </div>
 </div>
+<div style="font-family: Arial; padding:20px;">
+    <h2>Normalisasi Data</h2>
+
+    <p>Data Awal:</p>
+    <div id="dataAwal"></div>
+
+    <h3>Hasil Min-Max Normalization</h3>
+    <div id="minmax"></div>
+
+    <h3>Hasil Z-Score Normalization</h3>
+    <div id="zscore"></div>
+
+    <h3>Hasil Decimal Scaling</h3>
+    <div id="decimal"></div>
+</div>
+
+<script>
+// ================= DATA =================
+let data = [10, 20, 30, 40, 50];
+
+// tampilkan data awal
+document.getElementById("dataAwal").innerHTML = data.join(", ");
+
+// ================= MIN MAX =================
+function minMaxNormalization(data){
+    let min = Math.min(...data);
+    let max = Math.max(...data);
+
+    return data.map(x => ((x - min) / (max - min)).toFixed(2));
+}
+
+// ================= Z SCORE =================
+function zScoreNormalization(data){
+    let mean = data.reduce((a,b)=>a+b,0) / data.length;
+
+    let std = Math.sqrt(
+        data.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / data.length
+    );
+
+    return data.map(x => ((x - mean) / std).toFixed(2));
+}
+
+// ================= DECIMAL SCALING =================
+function decimalScaling(data){
+    let max = Math.max(...data);
+    let j = Math.ceil(Math.log10(max + 1));
+
+    return data.map(x => (x / Math.pow(10, j)).toFixed(3));
+}
+
+// ================= PROSES =================
+let minmax = minMaxNormalization(data);
+let zscore = zScoreNormalization(data);
+let decimal = decimalScaling(data);
+
+// ================= OUTPUT =================
+document.getElementById("minmax").innerHTML = minmax.join(", ");
+document.getElementById("zscore").innerHTML = zscore.join(", ");
+document.getElementById("decimal").innerHTML = decimal.join(", ");
+
+</script>
               
               
 
