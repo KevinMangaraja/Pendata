@@ -370,65 +370,149 @@ document.write(`
   
 </div>
 </div>
-<div style="font-family: Arial; padding:20px;">
-    <h2>Normalisasi Data</h2>
+<div class="container">
 
-    <p>Data Awal:</p>
-    <div id="dataAwal"></div>
+<h1>📊 NORMALISASI DATA (LENGKAP)</h1>
 
-    <h3>Hasil Min-Max Normalization</h3>
-    <div id="minmax"></div>
+<h2>1. Pengertian</h2>
+<p>
+Normalisasi data adalah proses mengubah nilai data ke dalam skala tertentu 
+tanpa menghilangkan informasi penting, sehingga data menjadi lebih seragam.
+</p>
 
-    <h3>Hasil Z-Score Normalization</h3>
-    <div id="zscore"></div>
+<h2>2. Tujuan Normalisasi</h2>
+<ul>
+<li>Menyamakan skala antar fitur</li>
+<li>Menghindari dominasi nilai besar</li>
+<li>Meningkatkan performa algoritma (KNN, Clustering, Neural Network)</li>
+<li>Mempercepat proses komputasi</li>
+</ul>
 
-    <h3>Hasil Decimal Scaling</h3>
-    <div id="decimal"></div>
+<h2>3. Jenis-Jenis Normalisasi</h2>
+
+<div class="box">
+<h3>1. Min-Max Normalization</h3>
+<p><b>Rumus:</b> (X - min) / (max - min)</p>
+<p><b>Range:</b> 0 – 1</p>
+<p><b>Contoh:</b> Data = [10,20,30]</p>
+<p>Hasil = [0, 0.5, 1]</p>
+</div>
+
+<div class="box">
+<h3>2. Z-Score (Standardisasi)</h3>
+<p><b>Rumus:</b> (X - mean) / std</p>
+<p><b>Mean:</b> rata-rata</p>
+<p><b>Std:</b> standar deviasi</p>
+<p><b>Contoh:</b> Data = [10,20,30]</p>
+<p>Hasil = [-1.22, 0, 1.22]</p>
+</div>
+
+<div class="box">
+<h3>3. Decimal Scaling</h3>
+<p><b>Rumus:</b> X / 10^j</p>
+<p><b>Contoh:</b> Data = [100,200,300]</p>
+<p>Hasil = [0.1, 0.2, 0.3]</p>
+</div>
+
+<div class="box">
+<h3>4. Mean Normalization</h3>
+<p><b>Rumus:</b> (X - mean) / (max - min)</p>
+</div>
+
+<div class="box">
+<h3>5. Normalisasi Vektor (L1 & L2)</h3>
+<p><b>L1:</b> X / jumlah nilai absolut</p>
+<p><b>L2:</b> X / sqrt(jumlah kuadrat)</p>
+<p>Biasanya digunakan pada text mining & cosine similarity</p>
+</div>
+
+<h2>4. Perbandingan Metode</h2>
+<ul>
+<li>Min-Max → cocok untuk KNN</li>
+<li>Z-Score → cocok untuk distribusi normal</li>
+<li>Decimal → sederhana</li>
+<li>Mean → alternatif Min-Max</li>
+<li>L2 → machine learning berbasis jarak</li>
+</ul>
+
+<h2>5. Implementasi (Python - Sklearn)</h2>
+
+<code>
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+data = [[10],[20],[30]]
+print(scaler.fit_transform(data))
+</code>
+
+<code>
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+print(scaler.fit_transform(data))
+</code>
+
+<h2>6. Input & Praktik Langsung</h2>
+
+<input type="text" id="inputData" placeholder="Contoh: 10,20,30,40">
+<button onclick="proses()">Proses</button>
+
+<div class="hasil">
+<p><b>Data:</b> <span id="data"></span></p>
+<p><b>Min-Max:</b> <span id="minmax"></span></p>
+<p><b>Z-Score:</b> <span id="zscore"></span></p>
+<p><b>Decimal:</b> <span id="decimal"></span></p>
+<p><b>Mean:</b> <span id="mean"></span></p>
+<p><b>L2 Normalization:</b> <span id="l2"></span></p>
+</div>
+
 </div>
 
 <script>
-// ================= DATA =================
-let data = [10, 20, 30, 40, 50];
 
-// tampilkan data awal
-document.getElementById("dataAwal").innerHTML = data.join(", ");
-
-// ================= MIN MAX =================
-function minMaxNormalization(data){
+// MinMax
+function minMax(data){
     let min = Math.min(...data);
     let max = Math.max(...data);
-
-    return data.map(x => ((x - min) / (max - min)).toFixed(2));
+    return data.map(x => ((x - min) / (max - min)).toFixed(3));
 }
 
-// ================= Z SCORE =================
-function zScoreNormalization(data){
+// ZScore
+function zScore(data){
     let mean = data.reduce((a,b)=>a+b,0) / data.length;
-
-    let std = Math.sqrt(
-        data.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / data.length
-    );
-
-    return data.map(x => ((x - mean) / std).toFixed(2));
+    let std = Math.sqrt(data.reduce((s,x)=>s+Math.pow(x-mean,2),0)/data.length);
+    return data.map(x => ((x - mean) / std).toFixed(3));
 }
 
-// ================= DECIMAL SCALING =================
-function decimalScaling(data){
+// Decimal
+function decimal(data){
     let max = Math.max(...data);
-    let j = Math.ceil(Math.log10(max + 1));
-
-    return data.map(x => (x / Math.pow(10, j)).toFixed(3));
+    let j = Math.ceil(Math.log10(max+1));
+    return data.map(x => (x / Math.pow(10,j)).toFixed(3));
 }
 
-// ================= PROSES =================
-let minmax = minMaxNormalization(data);
-let zscore = zScoreNormalization(data);
-let decimal = decimalScaling(data);
+// Mean
+function meanNorm(data){
+    let min = Math.min(...data);
+    let max = Math.max(...data);
+    let mean = data.reduce((a,b)=>a+b,0)/data.length;
+    return data.map(x => ((x - mean)/(max-min)).toFixed(3));
+}
 
-// ================= OUTPUT =================
-document.getElementById("minmax").innerHTML = minmax.join(", ");
-document.getElementById("zscore").innerHTML = zscore.join(", ");
-document.getElementById("decimal").innerHTML = decimal.join(", ");
+// L2
+function l2(data){
+    let denom = Math.sqrt(data.reduce((s,x)=>s+x*x,0));
+    return data.map(x => (x/denom).toFixed(3));
+}
+
+function proses(){
+    let data = document.getElementById("inputData").value.split(",").map(Number);
+
+    document.getElementById("data").innerHTML = data.join(", ");
+    document.getElementById("minmax").innerHTML = minMax(data).join(", ");
+    document.getElementById("zscore").innerHTML = zScore(data).join(", ");
+    document.getElementById("decimal").innerHTML = decimal(data).join(", ");
+    document.getElementById("mean").innerHTML = meanNorm(data).join(", ");
+    document.getElementById("l2").innerHTML = l2(data).join(", ");
+}
 
 </script>
               
