@@ -372,399 +372,92 @@ document.write(`
 </div>
 <div class="container">
 
-<h1>1. NORMALISASI DATA</h1>
+<h1></h1>
 
-<h2>1. Pengertian</h2>
-<p>
-Normalisasi data adalah proses mengubah nilai data ke dalam skala tertentu 
-tanpa menghilangkan informasi penting, sehingga data menjadi lebih seragam.
-</p>
+<h1>Analisa Data Kesuburan Tanah (KNN)</h1>
 
-<h2>2. Tujuan Normalisasi</h2>
-<ul>
-<li>Menyamakan skala antar fitur</li>
-<li>Menghindari dominasi nilai besar</li>
-<li>Meningkatkan performa algoritma (KNN, Clustering, Neural Network)</li>
-<li>Mempercepat proses komputasi</li>
-</ul>
+<div class="section">
+    <h2>1. Analisis dengan K-Nearest Neighbors (KNN)</h2>
+    <p>
+        Metode <b>K-Nearest Neighbors (KNN)</b> merupakan algoritma klasifikasi yang bekerja dengan cara 
+        membandingkan suatu data baru dengan data lain yang sudah diketahui kelasnya berdasarkan kedekatan jarak.
+    </p>
 
-<h2>3. Jenis-Jenis Normalisasi</h2>
+    <p>Parameter yang digunakan dalam analisis ini meliputi:</p>
+    <ul>
+        <li>pH Tanah</li>
+        <li>N Total (%)</li>
+        <li>P Tersedia (ppm)</li>
+        <li>K Tersedia</li>
+        <li>C Organik</li>
+        <li>KTK</li>
+        <li>Kejenuhan Basa</li>
+        <li>Tekstur Tanah</li>
+        <li>Kadar Air</li>
+        <li>Bulk Density</li>
+    </ul>
 
-<div class="box">
-<h3>1. Min-Max Normalization</h3>
-<p><b>Rumus:</b> (X - min) / (max - min)</p>
-<p><b>Range:</b> 0 – 1</p>
-<p><b>Contoh:</b> Data = [10,20,30]</p>
-<p>Hasil = [0, 0.5, 1]</p>
+    <h3>Langkah-langkah KNN:</h3>
+    <ol>
+        <li>Menentukan nilai K (jumlah tetangga terdekat), digunakan K = 5</li>
+        <li>Menghitung jarak menggunakan Euclidean Distance</li>
+        <li>Mengurutkan jarak dari yang terkecil</li>
+        <li>Mengambil 5 data terdekat</li>
+        <li>Menentukan kelas berdasarkan voting mayoritas</li>
+    </ol>
+
+    <p><b>Rumus Euclidean Distance:</b></p>
+    <p>d(x,y) = √Σ(x<sub>i</sub> - y<sub>i</sub>)²</p>
+
+    <p>
+        Jika mayoritas tetangga termasuk kategori <b>Subur</b>, maka data diklasifikasikan sebagai Subur, 
+        dan sebaliknya.
+    </p>
 </div>
 
-<div class="box">
-<h3>2. Z-Score (Standardisasi)</h3>
-<p><b>Rumus:</b> (X - mean) / std</p>
-<p><b>Mean:</b> rata-rata</p>
-<p><b>Std:</b> standar deviasi</p>
-<p><b>Contoh:</b> Data = [10,20,30]</p>
-<p>Hasil = [-1.22, 0, 1.22]</p>
+<div class="section">
+    <h2>2. Pemrosesan Data (Preprocessing)</h2>
+    <ul>
+        <li>Menangani missing value dengan rata-rata (mean)</li>
+        <li>Encoding data kategorikal (Tekstur Tanah)</li>
+        <li>Normalisasi menggunakan StandardScaler</li>
+        <li>Pembagian data: 80% training dan 20% testing</li>
+    </ul>
 </div>
 
-<div class="box">
-<h3>3. Decimal Scaling</h3>
-<p><b>Rumus:</b> X / 10^j</p>
-<p><b>Contoh:</b> Data = [100,200,300]</p>
-<p>Hasil = [0.1, 0.2, 0.3]</p>
+<div class="section">
+    <h2>3. Hasil Metrik Evaluasi</h2>
+    <table>
+        <tr>
+            <th>Metrik</th>
+            <th>Nilai</th>
+        </tr>
+        <tr>
+            <td>Accuracy</td>
+            <td>1.00</td>
+        </tr>
+        <tr>
+            <td>Precision</td>
+            <td>1.00</td>
+        </tr>
+        <tr>
+            <td>Recall</td>
+            <td>1.00</td>
+        </tr>
+        <tr>
+            <td>F1-Score</td>
+            <td>1.00</td>
+        </tr>
+    </table>
 </div>
 
-<div class="box">
-<h3>4. Mean Normalization</h3>
-<p><b>Rumus:</b> (X - mean) / (max - min)</p>
+<div class="section">
+    <h2>4. Kesimpulan</h2>
+    <p>
+        Model KNN dengan nilai K = 5 mampu mengklasifikasikan data kesuburan tanah dengan sangat baik 
+        berdasarkan hasil evaluasi yang mencapai nilai sempurna pada semua metrik.
+    </p>
 </div>
-
-<div class="box">
-<h3>5. Normalisasi Vektor (L1 & L2)</h3>
-<p><b>L1:</b> X / jumlah nilai absolut</p>
-<p><b>L2:</b> X / sqrt(jumlah kuadrat)</p>
-<p>Biasanya digunakan pada text mining & cosine similarity</p>
-</div>
-
-<h2>4. Perbandingan Metode</h2>
-<ul>
-<li>Min-Max → cocok untuk KNN</li>
-<li>Z-Score → cocok untuk distribusi normal</li>
-<li>Decimal → sederhana</li>
-<li>Mean → alternatif Min-Max</li>
-<li>L2 → machine learning berbasis jarak</li>
-</ul>
-
-<h2>5. Implementasi (Python - Sklearn)</h2>
-
-<code>
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
-data = [[10],[20],[30]]
-print(scaler.fit_transform(data))
-</code>
-
-<code>
-from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
-print(scaler.fit_transform(data))
-</code>
-
-<h2>6. Input & Praktik Langsung</h2>
-
-<input type="text" id="inputData" placeholder="Contoh: 10,20,30,40">
-<button onclick="proses()">Proses</button>
-
-<div class="hasil">
-<p><b>Data:</b> <span id="data"></span></p>
-<p><b>Min-Max:</b> <span id="minmax"></span></p>
-<p><b>Z-Score:</b> <span id="zscore"></span></p>
-<p><b>Decimal:</b> <span id="decimal"></span></p>
-<p><b>Mean:</b> <span id="mean"></span></p>
-<p><b>L2 Normalization:</b> <span id="l2"></span></p>
-</div>
-
-</div>
-
-<script>
-
-// MinMax
-function minMax(data){
-    let min = Math.min(...data);
-    let max = Math.max(...data);
-    return data.map(x => ((x - min) / (max - min)).toFixed(3));
-}
-
-// ZScore
-function zScore(data){
-    let mean = data.reduce((a,b)=>a+b,0) / data.length;
-    let std = Math.sqrt(data.reduce((s,x)=>s+Math.pow(x-mean,2),0)/data.length);
-    return data.map(x => ((x - mean) / std).toFixed(3));
-}
-
-// Decimal
-function decimal(data){
-    let max = Math.max(...data);
-    let j = Math.ceil(Math.log10(max+1));
-    return data.map(x => (x / Math.pow(10,j)).toFixed(3));
-}
-
-// Mean
-function meanNorm(data){
-    let min = Math.min(...data);
-    let max = Math.max(...data);
-    let mean = data.reduce((a,b)=>a+b,0)/data.length;
-    return data.map(x => ((x - mean)/(max-min)).toFixed(3));
-}
-
-// L2
-function l2(data){
-    let denom = Math.sqrt(data.reduce((s,x)=>s+x*x,0));
-    return data.map(x => (x/denom).toFixed(3));
-}
-
-function proses(){
-    let data = document.getElementById("inputData").value.split(",").map(Number);
-
-    document.getElementById("data").innerHTML = data.join(", ");
-    document.getElementById("minmax").innerHTML = minMax(data).join(", ");
-    document.getElementById("zscore").innerHTML = zScore(data).join(", ");
-    document.getElementById("decimal").innerHTML = decimal(data).join(", ");
-    document.getElementById("mean").innerHTML = meanNorm(data).join(", ");
-    document.getElementById("l2").innerHTML = l2(data).join(", ");
-}
-
-</script>
-              
-              
-
-<section style="font-family:Arial;padding:20px">
-<br>
-<h1> 2. Perhitungan KNN untuk Mengisi Data Missing</h2>
-
-<h3>1. Data Awal</h3>
-
-<table border="1" cellpadding="8">
-<tr>
-<th>No</th>
-<th>IPK</th>
-<th>PO</th>
-<th>ML</th>
-</tr>
-
-<tr><td>1</td><td>2</td><td>200000</td><td>2</td></tr>
-<tr><td>2</td><td>3</td><td>300000</td><td>3</td></tr>
-<tr><td>3</td><td>4</td><td>200000</td><td>2</td></tr>
-<tr><td>4</td><td>2</td><td>200000</td><td>3</td></tr>
-<tr><td>5</td><td>3</td><td>300000</td><td>2</td></tr>
-<tr><td>6</td><td>4</td><td>400000</td><td>3</td></tr>
-
-<tr>
-<td>7</td>
-<td>2</td>
-<td>300000</td>
-<td>?</td>
-</tr>
-
-</table>
-
-<p>Data ke-7 memiliki nilai ML kosong sehingga harus diprediksi menggunakan metode <b>KNN</b>.</p>
-
-<hr>
-
-<h3>2. Normalisasi Min-Max</h3>
-
-<p><b>Rumus:</b></p>
-
-<p>
-X' = (X − Xmin) / (Xmax − Xmin)
-</p>
-
-<h4>Nilai Min dan Max</h4>
-
-<table border="1" cellpadding="8">
-<tr>
-<th>Variabel</th>
-<th>Min</th>
-<th>Max</th>
-</tr>
-
-<tr>
-<td>IPK</td>
-<td>2</td>
-<td>4</td>
-</tr>
-
-<tr>
-<td>PO</td>
-<td>200000</td>
-<td>400000</td>
-</tr>
-
-<tr>
-<td>ML</td>
-<td>2</td>
-<td>3</td>
-</tr>
-
-</table>
-
-<h4>Hasil Normalisasi</h4>
-
-<table border="1" cellpadding="8">
-
-<tr>
-<th>No</th>
-<th>IPK</th>
-<th>PO</th>
-<th>ML</th>
-</tr>
-
-<tr><td>1</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>2</td><td>0.5</td><td>0.5</td><td>1</td></tr>
-<tr><td>3</td><td>1</td><td>0</td><td>0</td></tr>
-<tr><td>4</td><td>0</td><td>0</td><td>1</td></tr>
-<tr><td>5</td><td>0.5</td><td>0.5</td><td>0</td></tr>
-<tr><td>6</td><td>1</td><td>1</td><td>1</td></tr>
-
-<tr>
-<td>7</td>
-<td>0</td>
-<td>0.5</td>
-<td>?</td>
-</tr>
-
-</table>
-
-<hr>
-
-<h3>3. Perhitungan Jarak Euclidean</h3>
-
-<p><b>Rumus:</b></p>
-
-<p>
-d = √((x1 − x2)² + (y1 − y2)²)
-</p>
-
-<table border="1" cellpadding="8">
-
-<tr>
-<th>Data</th>
-<th>Perhitungan</th>
-<th>Jarak</th>
-</tr>
-
-<tr>
-<td>D1</td>
-<td>√((0−0)² + (0.5−0)²)</td>
-<td>0.5</td>
-</tr>
-
-<tr>
-<td>D2</td>
-<td>√((0−0.5)² + (0.5−0.5)²)</td>
-<td>0.5</td>
-</tr>
-
-<tr>
-<td>D3</td>
-<td>√((0−1)² + (0.5−0)²)</td>
-<td>1.118</td>
-</tr>
-
-<tr>
-<td>D4</td>
-<td>√((0−0)² + (0.5−0)²)</td>
-<td>0.5</td>
-</tr>
-
-<tr>
-<td>D5</td>
-<td>√((0−0.5)² + (0.5−0.5)²)</td>
-<td>0.5</td>
-</tr>
-
-<tr>
-<td>D6</td>
-<td>√((0−1)² + (0.5−1)²)</td>
-<td>1.118</td>
-</tr>
-
-</table>
-
-<hr>
-
-<h3>4. Urutan Jarak Terdekat</h3>
-
-<table border="1" cellpadding="8">
-
-<tr>
-<th>Data</th>
-<th>Jarak</th>
-<th>ML</th>
-</tr>
-
-<tr><td>1</td><td>0.5</td><td>0</td></tr>
-<tr><td>2</td><td>0.5</td><td>1</td></tr>
-<tr><td>4</td><td>0.5</td><td>1</td></tr>
-<tr><td>5</td><td>0.5</td><td>0</td></tr>
-<tr><td>3</td><td>1.118</td><td>0</td></tr>
-<tr><td>6</td><td>1.118</td><td>1</td></tr>
-
-</table>
-
-<hr>
-
-<h3>5. Menentukan Nilai K</h3>
-
-<p>K = 3</p>
-
-<hr>
-
-<h3>6. Voting</h3>
-
-<table border="1" cellpadding="8">
-
-<tr>
-<th>Data</th>
-<th>ML</th>
-</tr>
-
-<tr><td>1</td><td>0</td></tr>
-<tr><td>2</td><td>1</td></tr>
-<tr><td>4</td><td>1</td></tr>
-
-</table>
-
-<p>Mayoritas = <b>1</b></p>
-
-<hr>
-
-<h3>7. Denormalisasi</h3>
-
-<table border="1" cellpadding="8">
-
-<tr>
-<th>Nilai Asli</th>
-<th>Normalisasi</th>
-</tr>
-
-<tr><td>2</td><td>0</td></tr>
-<tr><td>3</td><td>1</td></tr>
-
-</table>
-
-<p>Voting = 1 → Nilai asli = <b>3</b></p>
-
-<hr>
-
-<h3>8. Hasil Akhir</h3>
-
-<table border="1" cellpadding="8">
-
-<tr>
-<th>No</th>
-<th>IPK</th>
-<th>PO</th>
-<th>ML</th>
-</tr>
-
-<tr><td>1</td><td>2</td><td>200000</td><td>2</td></tr>
-<tr><td>2</td><td>3</td><td>300000</td><td>3</td></tr>
-<tr><td>3</td><td>4</td><td>200000</td><td>2</td></tr>
-<tr><td>4</td><td>2</td><td>200000</td><td>3</td></tr>
-<tr><td>5</td><td>3</td><td>300000</td><td>2</td></tr>
-<tr><td>6</td><td>4</td><td>400000</td><td>3</td></tr>
-
-<tr>
-<td>7</td>
-<td>2</td>
-<td>300000</td>
-<td><b>3</b></td>
-</tr>
-
-</table>
-
 </section>
 
     <script type="text/x-thebe-config">
