@@ -457,6 +457,58 @@ document.write(`
 </section>
 <h3>ANALISIS DATA, MENGGUNAKAN NAIBE BAYES(GAUSSIAN NAIVE BAYES) MENGGUNAKAN DATA IRIS PADA KNIME</h3>
 <h4>Struktur knime pada naive bayes dan menggunakan metode dan fungsinya</h4>
+<!-- Mulai Penjelasan Workflow -->
+<div class="wf-container">
+    <div class="wf-header">Penjelasan Alur Kerja Naive Bayes</div>
+
+    <div class="wf-step">
+        <div class="wf-title"><span class="wf-badge">1</span> CSV Reader</div>
+        <div class="wf-content">
+            <span class="wf-label">Fungsi:</span> Memasukkan data mentah dari file CSV.<br>
+            <span class="wf-label">Setting:</span> Menentukan lokasi file, pemisah kolom (delimiter), dan header.
+        </div>
+    </div>
+
+    <div class="wf-step">
+        <div class="wf-title"><span class="wf-badge">2</span> Normalizer</div>
+        <div class="wf-content">
+            <span class="wf-label">Fungsi:</span> Menyamakan skala data numerik agar seimbang.<br>
+            <span class="wf-label">Setting:</span> Menggunakan metode Min-Max (skala 0-1) pada fitur angka.
+        </div>
+    </div>
+
+    <div class="wf-step">
+        <div class="wf-title"><span class="wf-badge">3</span> Table Partitioner</div>
+        <div class="wf-content">
+            <span class="wf-label">Fungsi:</span> Membagi dataset menjadi data Training dan data Testing.<br>
+            <span class="wf-label">Setting:</span> Rasio pembagian (misal 80:20) dengan pengambilan sampel acak.
+        </div>
+    </div>
+
+    <div class="wf-step">
+        <div class="wf-title"><span class="wf-badge">4</span> Naive Bayes Learner</div>
+        <div class="wf-content">
+            <span class="wf-label">Fungsi:</span> Melatih algoritma untuk membangun model prediksi.<br>
+            <span class="wf-label">Setting:</span> Menentukan kolom label/target yang ingin diprediksi.
+        </div>
+    </div>
+
+    <div class="wf-step">
+        <div class="wf-title"><span class="wf-badge">5</span> Naive Bayes Predictor</div>
+        <div class="wf-content">
+            <span class="wf-label">Fungsi:</span> Menerapkan model pada data baru (data testing).<br>
+            <span class="wf-label">Setting:</span> Mencocokkan input model dengan data pengujian.
+        </div>
+    </div>
+
+    <div class="wf-step">
+        <div class="wf-title"><span class="wf-badge">6</span> Scorer</div>
+        <div class="wf-content">
+            <span class="wf-label">Fungsi:</span> Menilai akurasi dan performa prediksi model.<br>
+            <span class="wf-label">Setting:</span> Membandingkan nilai prediksi vs nilai asli (Confusion Matrix).
+        </div>
+    </div>
+</div>
     
 
     <script type="text/x-thebe-config">
