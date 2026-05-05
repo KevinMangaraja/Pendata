@@ -457,6 +457,9 @@ document.write(`
 </section>
 <h3>ANALISIS DATA, MENGGUNAKAN NAIBE BAYES(GAUSSIAN NAIVE BAYES) MENGGUNAKAN DATA IRIS PADA KNIME</h3>
 <h4>Struktur knime pada naive bayes dan menggunakan metode dan fungsinya</h4>
+<div class="image-box">
+    <img src="struktur.png" alt="Scatter Plot Iris">
+</div>
 <!-- Mulai Penjelasan Workflow -->
 <div class="wf-container">
     <div class="wf-header">Penjelasan Alur Kerja Naive Bayes</div>
@@ -467,6 +470,14 @@ document.write(`
             <span class="wf-label">Fungsi:</span> Memasukkan data mentah dari file CSV.<br>
             <span class="wf-label">Setting:</span> Menentukan lokasi file, pemisah kolom (delimiter), dan header.
         </div>
+        <div class="image-box">
+          <p>tabel</p>
+          <img src="tabel.png" alt="Scatter Plot Iris">
+        </div>
+        <div class="image-box">
+          <p>statitik tabel</p>
+          <img src="statistic" alt="Scatter Plot Iris">
+      </div>
     </div>
 
     <div class="wf-step">
@@ -474,6 +485,9 @@ document.write(`
         <div class="wf-content">
             <span class="wf-label">Fungsi:</span> Menyamakan skala data numerik agar seimbang.<br>
             <span class="wf-label">Setting:</span> Menggunakan metode Min-Max (skala 0-1) pada fitur angka.
+        </div>
+        <div class="image-box">
+            <img src="normalizer.png" alt="Scatter Plot Iris">
         </div>
     </div>
 
@@ -483,6 +497,14 @@ document.write(`
             <span class="wf-label">Fungsi:</span> Membagi dataset menjadi data Training dan data Testing.<br>
             <span class="wf-label">Setting:</span> Rasio pembagian (misal 80:20) dengan pengambilan sampel acak.
         </div>
+        <div class="image-box">
+            <p>first pasrtition</p>
+            <img src="first.png" alt="Scatter Plot Iris">
+        </div>
+        <div class="image-box">
+            <p>second partition</p>
+            <img src="second.png" alt="Scatter Plot Iris">
+        </div>
     </div>
 
     <div class="wf-step">
@@ -490,6 +512,14 @@ document.write(`
         <div class="wf-content">
             <span class="wf-label">Fungsi:</span> Melatih algoritma untuk membangun model prediksi.<br>
             <span class="wf-label">Setting:</span> Menentukan kolom label/target yang ingin diprediksi.
+        </div>
+        <div class="image-box">
+            <p>naive bayes model</p>
+            <img src="naive bayes model.png" alt="Scatter Plot Iris">
+        </div>
+        <div class="image-box">
+            <p>tabel learning naive bayes</p>
+            <img src="tabel learn.png" alt="Scatter Plot Iris">
         </div>
     </div>
 
@@ -499,6 +529,10 @@ document.write(`
             <span class="wf-label">Fungsi:</span> Menerapkan model pada data baru (data testing).<br>
             <span class="wf-label">Setting:</span> Mencocokkan input model dengan data pengujian.
         </div>
+        <div class="image-box">
+            <p>classified data</p>
+            <img src="tabel buat calsifield.png" alt="Scatter Plot Iris">
+        </div>
     </div>
 
     <div class="wf-step">
@@ -506,6 +540,13 @@ document.write(`
         <div class="wf-content">
             <span class="wf-label">Fungsi:</span> Menilai akurasi dan performa prediksi model.<br>
             <span class="wf-label">Setting:</span> Membandingkan nilai prediksi vs nilai asli (Confusion Matrix).
+        </div>
+        <div class="image-box">
+            <p>confussion matrix</p>
+            <img src="confussion.png" alt="Scatter Plot Iris">
+        </div>
+        <div class="image-box">
+            <img src=".png" alt="Scatter Plot Iris">
         </div>
     </div>
 </div>
