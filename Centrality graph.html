@@ -1,77 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Analisis Naive Bayes (Sklearn)</title>
+<meta charset="UTF-8">
+<title>Naive Bayes Analisis (Python Sklearn)</title>
 
-    <style>
-        body {
-            font-family: Arial;
-            margin: 40px;
-            background: #f5f5f5;
-        }
+<style>
+body {
+    font-family: Arial;
+    margin: 40px;
+    background: #f4f6f9;
+}
 
-        h1, h2 {
-            color: #2c3e50;
-        }
+h1, h2, h3 {
+    color: #2c3e50;
+}
 
-        .box {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
+.container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 
-        pre {
-            background: #272822;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 10px;
-            overflow-x: auto;
-        }
+.step {
+    margin-bottom: 15px;
+    padding: 15px;
+    border-left: 5px solid #3498db;
+    background: #ecf5ff;
+}
 
-        .hasil {
-            background: #dff0d8;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-    </style>
+pre {
+    background: #1e1e1e;
+    color: #00ffcc;
+    padding: 15px;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+</style>
 </head>
 
 <body>
 
-<h1>Analisis Data Menggunakan Naive Bayes (GaussianNB)</h1>
+<h1>ANALISIS DATA MENGGUNAKAN NAIVE BAYES (GAUSSIAN NB - PYTHON SKLEARN)</h1>
 
-<div class="box">
-    <h2>Pengertian</h2>
-    <p>
-        Naive Bayes adalah metode klasifikasi berbasis probabilitas dengan asumsi bahwa setiap fitur bersifat independen.
-        Pada penelitian ini digunakan <b>Gaussian Naive Bayes</b> karena data bersifat numerik (kontinu).
-    </p>
+<div class="container">
+<h2>Pengertian Naive Bayes</h2>
+<p>
+Naive Bayes adalah metode klasifikasi berbasis probabilitas dengan asumsi bahwa setiap fitur bersifat independen.
+Gaussian Naive Bayes digunakan untuk data numerik yang mengikuti distribusi normal.
+</p>
 </div>
 
-<div class="box">
-    <h2>Dataset</h2>
-    <p>Dataset yang digunakan adalah data sederhana untuk prediksi kelulusan mahasiswa berdasarkan:</p>
-    <ul>
-        <li>Nilai</li>
-        <li>Kehadiran</li>
-        <li>Tugas</li>
-    </ul>
+<div class="container">
+<h2>Dataset</h2>
+<p>Dataset yang digunakan berupa data numerik:</p>
+<ul>
+<li>Nilai</li>
+<li>Kehadiran</li>
+<li>Tugas</li>
+<li>Label: Lulus / Tidak</li>
+</ul>
 </div>
 
-<div class="box">
-    <h2>Implementasi Python (Sklearn)</h2>
+<div class="container">
+<h2>Langkah Analisis Menggunakan Python (Sklearn)</h2>
 
+<div class="step">
+<h3>1. Import Library</h3>
 <pre>
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import numpy as np
+</pre>
+</div>
 
-# Dataset
+<div class="step">
+<h3>2. Input Dataset</h3>
+<pre>
 X = np.array([
     [80, 90, 85],
     [60, 70, 60],
@@ -84,40 +91,60 @@ X = np.array([
 ])
 
 y = np.array(['Lulus', 'Tidak', 'Lulus', 'Tidak', 'Lulus', 'Tidak', 'Lulus', 'Tidak'])
+</pre>
+</div>
 
-# Split data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+<div class="step">
+<h3>3. Split Data (Training & Testing)</h3>
+<pre>
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42)
+</pre>
+</div>
 
-# Model Gaussian NB
+<div class="step">
+<h3>4. Training Model (GaussianNB)</h3>
+<pre>
 model = GaussianNB()
 model.fit(X_train, y_train)
+</pre>
+</div>
 
-# Prediksi
+<div class="step">
+<h3>5. Prediksi Data</h3>
+<pre>
 y_pred = model.predict(X_test)
+print("Hasil Prediksi:", y_pred)
+</pre>
+</div>
 
-# Evaluasi
+<div class="step">
+<h3>6. Evaluasi Model</h3>
+<pre>
 akurasi = accuracy_score(y_test, y_pred)
-
-print("Prediksi:", y_pred)
 print("Akurasi:", akurasi)
 </pre>
+</div>
 
 </div>
 
-<div class="box">
-    <h2>Hasil Analisis</h2>
-    <div class="hasil">
-        Model berhasil melakukan klasifikasi dengan tingkat akurasi yang cukup baik.
-        Gaussian Naive Bayes cocok digunakan untuk data numerik karena menggunakan distribusi normal (Gaussian).
-    </div>
+<div class="container">
+<h2>Penjelasan Alur (Pengganti KNIME)</h2>
+
+<div class="step"><b>1. Dataset</b> → Data dimasukkan dalam bentuk array numpy</div>
+<div class="step"><b>2. Preprocessing</b> → Pembagian data training dan testing</div>
+<div class="step"><b>3. Model Training</b> → Menggunakan GaussianNB</div>
+<div class="step"><b>4. Prediction</b> → Model memprediksi data baru</div>
+<div class="step"><b>5. Evaluasi</b> → Menghitung akurasi model</div>
+
 </div>
 
-<div class="box">
-    <h2>Kesimpulan</h2>
-    <p>
-        Berdasarkan hasil analisis, metode Gaussian Naive Bayes dapat digunakan untuk klasifikasi data numerik dengan baik.
-        Model ini sederhana, cepat, dan memiliki performa yang cukup tinggi meskipun dengan dataset kecil.
-    </p>
+<div class="container">
+<h2>Kesimpulan</h2>
+<p>
+Metode Gaussian Naive Bayes berhasil digunakan untuk klasifikasi data numerik.
+Model ini sederhana, cepat, dan memiliki akurasi yang cukup baik.
+</p>
 </div>
 
 </body>
