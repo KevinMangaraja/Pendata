@@ -1,151 +1,119 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Naive Bayes Analisis (Python Sklearn)</title>
-
-<style>
-body {
-    font-family: Arial;
-    margin: 40px;
-    background: #f4f6f9;
-}
-
-h1, h2, h3 {
-    color: #2c3e50;
-}
-
-.container {
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.step {
-    margin-bottom: 15px;
-    padding: 15px;
-    border-left: 5px solid #3498db;
-    background: #ecf5ff;
-}
-
-pre {
-    background: #1e1e1e;
-    color: #00ffcc;
-    padding: 15px;
-    border-radius: 10px;
-    overflow-x: auto;
-}
-</style>
-</head>
-
-<body>
-
-<h1>ANALISIS DATA MENGGUNAKAN NAIVE BAYES (GAUSSIAN NB - PYTHON SKLEARN)</h1>
-
-<div class="container">
-<h2>Pengertian Naive Bayes</h2>
-<p>
-Naive Bayes adalah metode klasifikasi berbasis probabilitas dengan asumsi bahwa setiap fitur bersifat independen.
-Gaussian Naive Bayes digunakan untuk data numerik yang mengikuti distribusi normal.
-</p>
-</div>
-
-<div class="container">
-<h2>Dataset</h2>
-<p>Dataset yang digunakan berupa data numerik:</p>
-<ul>
-<li>Nilai</li>
-<li>Kehadiran</li>
-<li>Tugas</li>
-<li>Label: Lulus / Tidak</li>
-</ul>
-</div>
-
-<div class="container">
-<h2>Langkah Analisis Menggunakan Python (Sklearn)</h2>
-
-<div class="step">
-<h3>1. Import Library</h3>
-<pre>
+from flask import Flask, request
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.datasets import load_iris
 import numpy as np
-</pre>
-</div>
 
-<div class="step">
-<h3>2. Input Dataset</h3>
-<pre>
-X = np.array([
-    [80, 90, 85],
-    [60, 70, 60],
-    [75, 80, 78],
-    [50, 60, 55],
-    [90, 95, 92],
-    [45, 50, 50],
-    [70, 85, 80],
-    [65, 75, 70]
-])
+app = Flask(__name__)
 
-y = np.array(['Lulus', 'Tidak', 'Lulus', 'Tidak', 'Lulus', 'Tidak', 'Lulus', 'Tidak'])
-</pre>
-</div>
+# ======================
+# DATASET IRIS
+# ======================
+data = load_iris()
+X = data.data
+y = data.target
 
-<div class="step">
-<h3>3. Split Data (Training & Testing)</h3>
-<pre>
+# Split data
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42)
-</pre>
-</div>
+    X, y, test_size=0.3, random_state=42)
 
-<div class="step">
-<h3>4. Training Model (GaussianNB)</h3>
+# Model Gaussian NB
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+# Evaluasi
+y_pred = model.predict(X_test)
+akurasi = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+
+# ======================
+# HALAMAN WEB (HTML)
+# ======================
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    hasil = ""
+    
+    if request.method == 'POST':
+        f1 = float(request.form['f1'])
+        f2 = float(request.form['f2'])
+        f3 = float(request.form['f3'])
+        f4 = float(request.form['f4'])
+
+        data_input = np.array([[f1, f2, f3, f4]])
+        pred = model.predict(data_input)
+        hasil = data.target_names[pred][0]
+
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Naive Bayes Sklearn</title>
+        <style>
+            body {{font-family: Arial; margin:40px; background:#f4f6f9;}}
+            .box {{background:white; padding:20px; margin-bottom:20px; border-radius:10px;}}
+            input {{padding:8px; margin:5px;}}
+            button {{padding:10px; background:#3498db; color:white; border:none;}}
+            table {{border-collapse: collapse; margin-top:10px;}}
+            td, th {{border:1px solid black; padding:5px;}}
+        </style>
+    </head>
+
+    <body>
+
+    <h1>Analisis Naive Bayes (GaussianNB - Python Sklearn)</h1>
+
+    <div class="box">
+        <h2>Dataset</h2>
+        <p>Menggunakan dataset Iris dari sklearn</p>
+    </div>
+
+    <div class="box">
+        <h2>Akurasi Model</h2>
+        <h3>{round(akurasi,3)}</h3>
+    </div>
+
+    <div class="box">
+        <h2>Confusion Matrix</h2>
+        <table>
+            <tr><th></th><th>Pred 0</th><th>Pred 1</th><th>Pred 2</th></tr>
+            <tr><th>Actual 0</th><td>{cm[0][0]}</td><td>{cm[0][1]}</td><td>{cm[0][2]}</td></tr>
+            <tr><th>Actual 1</th><td>{cm[1][0]}</td><td>{cm[1][1]}</td><td>{cm[1][2]}</td></tr>
+            <tr><th>Actual 2</th><td>{cm[2][0]}</td><td>{cm[2][1]}</td><td>{cm[2][2]}</td></tr>
+        </table>
+    </div>
+
+    <div class="box">
+        <h2>Input Data untuk Prediksi</h2>
+        <form method="post">
+            Sepal Length: <input name="f1" required><br>
+            Sepal Width: <input name="f2" required><br>
+            Petal Length: <input name="f3" required><br>
+            Petal Width: <input name="f4" required><br><br>
+            <button type="submit">Prediksi</button>
+        </form>
+
+        <h3>Hasil: {hasil}</h3>
+    </div>
+
+    <div class="box">
+        <h2>Perhitungan (Python Sklearn)</h2>
 <pre>
 model = GaussianNB()
 model.fit(X_train, y_train)
-</pre>
-</div>
 
-<div class="step">
-<h3>5. Prediksi Data</h3>
-<pre>
 y_pred = model.predict(X_test)
-print("Hasil Prediksi:", y_pred)
-</pre>
-</div>
 
-<div class="step">
-<h3>6. Evaluasi Model</h3>
-<pre>
 akurasi = accuracy_score(y_test, y_pred)
-print("Akurasi:", akurasi)
 </pre>
-</div>
+    </div>
 
-</div>
+    </body>
+    </html>
+    """
 
-<div class="container">
-<h2>Penjelasan Alur (Pengganti KNIME)</h2>
-
-<div class="step"><b>1. Dataset</b> → Data dimasukkan dalam bentuk array numpy</div>
-<div class="step"><b>2. Preprocessing</b> → Pembagian data training dan testing</div>
-<div class="step"><b>3. Model Training</b> → Menggunakan GaussianNB</div>
-<div class="step"><b>4. Prediction</b> → Model memprediksi data baru</div>
-<div class="step"><b>5. Evaluasi</b> → Menghitung akurasi model</div>
-
-</div>
-
-<div class="container">
-<h2>Kesimpulan</h2>
-<p>
-Metode Gaussian Naive Bayes berhasil digunakan untuk klasifikasi data numerik.
-Model ini sederhana, cepat, dan memiliki akurasi yang cukup baik.
-</p>
-</div>
-
-</body>
-</html>
+# ======================
+# RUN
+# ======================
+if __name__ == '__main__':
+    app.run(debug=True)
