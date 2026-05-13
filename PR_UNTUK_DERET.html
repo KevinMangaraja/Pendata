@@ -429,14 +429,21 @@ document.write(`
 <!-- ===================== DECISION TREE SECTION ===================== -->
 <section style="padding:40px; font-family:Arial, sans-serif; line-height:1.6;">
 
-  <h2 style="color:#2c3e50;">Random Forest</h2>
+  <h2>Random Forest</h2>
 
-  <h2 style="color:#2c3e50;">Langkah-langkah Random Forest di KNIME</h2>
+  <h2>Langkah-langkah Random Forest di KNIME</h2>
 
   <p>Hasil Statistik Random Forest dan Decision Tree
   </p>
 
   <ol>
+    <li>
+      <b>struktur</b><br>
+    </li>
+    <div class="image-box">
+        <img src="data awal.png" alt="Scatter Plot Iris">            
+    </div>
+    <li>
     <li>
       <b>Import Data</b><br>
       Gunakan node seperti <i>CSV Reader</i> atau <i>Excel Reader</i> 
@@ -472,8 +479,16 @@ document.write(`
       Setelah node dijalankan:
     </li>
     <div class="image-box">
-         <img src="prediction.png" alt="Scatter Plot Iris">            
+         <img src="Screenshot 2026-05-13 100143.png" alt="Scatter Plot Iris">            
     </div>
+    <li>
+      <b>essembel statistik</b><br>
+      Setelah node dijalankan:
+    </li>
+    <div class="image-box">
+         <img src="pohon.png" alt="Scatter Plot Iris">            
+    </div>
+    
 
     <li>
       <b>Evaluasi Model</b><br>
