@@ -445,47 +445,34 @@ document.write(`
     <div class="image-box">
         <img src="tabel_data.png" alt="Scatter Plot Iris">            
     </div>
+    <li>
 
     <li>
       <b>Partitioning Data</b><br>
       Gunakan node <i>Partitioning</i> untuk membagi data menjadi:
       <ul>
-        <li>Data Training (90% - 10%)</li>
-        <li>Data Testing (10% - 90%)</li>
+        <li>Data Training (80% - 20%)</li>
+        <li>Data Testing (20% - 80%)</li>
       </ul>
     </li>
     <div class="image-box">
-        <img src="struktur dan partitioner.png" alt="Scatter Plot Iris">            
+        <img src="patitioner1.png" alt="Scatter Plot Iris">            
+        <img src="patitioner2.png" alt="Scatter Plot Iris">            
     </div>
 
     <li>
-      <b>Membuat Model</b><br>
-      Tambahkan node <i>Decision Tree Learner</i>, lalu:
-      <ul>
-        <li>Pilih kolom target (kelas)</li>
-        <li>Pilih metode (Gini Index / Information Gain)</li>
-      </ul>
-    </li>
-
-    <li>
-      <b>Menampilkan Decision Tree</b><br>
+      <b>random forest leaner</b><br>
       Setelah node dijalankan:
-      <ul>
-        <li>Klik kanan pada node <i>Decision Tree Learner</i></li>
-        <li>Pilih <b>"View: Decision Tree"</b></li>
-      </ul>
     </li>
     <div class="image-box">
-         <img src="decision tree.png" alt="Scatter Plot Iris">            
+         <img src="prediction.png" alt="Scatter Plot Iris">            
     </div>
-
     <li>
-      <b>Prediksi Data</b><br>
-      Gunakan node <i>Decision Tree Predictor</i> untuk menguji model 
-      dengan data testing.
+      <b>random forest predictor</b><br>
+      Setelah node dijalankan:
     </li>
     <div class="image-box">
-        <img src="predictor.png" alt="Scatter Plot Iris">            
+         <img src="prediction.png" alt="Scatter Plot Iris">            
     </div>
 
     <li>
@@ -494,20 +481,95 @@ document.write(`
     </li>
     <div class="image-box">
         <img src="c1.png" alt="Scatter Plot Iris">            
-        <img src="acuraccy.png" alt="Scatter Plot Iris">            
+        <img src="acuraccy_ra.png" alt="Scatter Plot Iris">            
     </div>
   </ol>
 
   <hr>
 
-  <h2 style="color:#2c3e50;">Kesimpulan</h2>
+<!-- Kesimpulan Hasil Statistik -->
+<div class="bg-white p-6 rounded-xl shadow-md mt-6">
+    <h2 class="text-2xl font-bold text-green-700 mb-4">
+        Kesimpulan Hasil Statistik Random Forest dan Decision Tree
+    </h2>
 
-  <p>
-    Decision Tree merupakan metode yang mudah dipahami karena berbentuk 
-    struktur pohon dan aturan keputusan yang jelas. Dengan menggunakan KNIME, 
-    proses pembuatan model menjadi lebih sederhana karena tidak memerlukan coding 
-    secara langsung, cukup dengan menyusun workflow.
-  </p>
+    <p class="text-gray-700 mb-4 text-justify">
+        Berdasarkan hasil pengolahan data <b>Play Tennis</b> menggunakan algoritma
+        <b>Random Forest</b> dan <b>Decision Tree</b> di KNIME, dapat disimpulkan bahwa:
+    </p>
+
+    <ol class="list-decimal pl-6 space-y-3 text-gray-700 text-justify">
+        <li>
+            Dataset berhasil dipisahkan menggunakan <b>Table Partitioner</b> menjadi:
+            <ul class="list-disc pl-6 mt-2">
+                <li>11 data training</li>
+                <li>3 data testing</li>
+            </ul>
+        </li>
+
+        <li>
+            Model <b>Random Forest</b> berhasil melakukan klasifikasi data dengan baik.
+            Hasil prediksi sebagian besar sesuai dengan label asli pada kolom
+            <b>Play Tennis</b>.
+        </li>
+
+        <li>
+            Berdasarkan hasil prediksi:
+            <ul class="list-disc pl-6 mt-2">
+                <li>
+                    Data dengan kondisi cuaca <b>Overcast</b> cenderung diprediksi
+                    <b>Yes</b>.
+                </li>
+                <li>
+                    Kondisi <b>Sunny</b> dengan humidity tinggi cenderung diprediksi
+                    <b>No</b>.
+                </li>
+                <li>
+                    Kondisi <b>Rain</b> dipengaruhi oleh atribut <b>Wind</b>.
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            Nilai probabilitas prediksi menunjukkan tingkat keyakinan model.
+            Semakin mendekati nilai <b>1</b>, maka model semakin yakin terhadap
+            hasil prediksi yang diberikan.
+        </li>
+
+        <li>
+            Pada bagian <b>Out-of-bag Prediction</b>, Random Forest mampu melakukan
+            evaluasi internal terhadap performa model tanpa memerlukan data validasi tambahan.
+        </li>
+
+        <li>
+            <b>Decision Tree</b> berhasil memvisualisasikan aturan keputusan berdasarkan
+            atribut seperti:
+            <ul class="list-disc pl-6 mt-2">
+                <li>Outlook</li>
+                <li>Humidity</li>
+                <li>Wind</li>
+            </ul>
+        </li>
+
+        <li>
+            Secara keseluruhan, metode <b>Random Forest</b> memberikan hasil yang lebih
+            stabil dan akurat dibandingkan Decision Tree tunggal karena menggunakan
+            banyak pohon keputusan dalam proses klasifikasi.
+        </li>
+    </ol>
+
+    <div class="mt-6 p-4 bg-green-100 rounded-lg border-l-4 border-green-600">
+        <h3 class="font-bold text-green-800 mb-2">Kesimpulan Akhir</h3>
+        <p class="text-gray-700 text-justify">
+            Metode <b>Random Forest</b> efektif digunakan untuk klasifikasi data
+            <b>Play Tennis</b> karena mampu menghasilkan prediksi dengan tingkat
+            keyakinan tinggi dan mengurangi risiko kesalahan dibandingkan
+            Decision Tree biasa. Selain itu, visualisasi Decision Tree membantu
+            memahami pola pengambilan keputusan berdasarkan kondisi cuaca terhadap
+            aktivitas bermain tenis.
+        </p>
+    </div>
+</div>
 
 </section>
 <!-- ===================== END SECTION ===================== -->
