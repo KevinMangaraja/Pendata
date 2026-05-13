@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pr &#8212; Matematika Diskrit</title>
+    <title>Pengertian naive bayes &#8212; Matematika Diskrit</title>
   
   
   
@@ -57,10 +57,10 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'PR_UNTUK_DERET';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Naive_bayes';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="12 (deret geometri) (deret aritmetika) 13" href="DERET%20DAN%20REKURSI.html" />
+    <link rel="prev" title="pr" href="PR_UNTUK_DERET.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -154,7 +154,9 @@
     
     <img src="_static/download.png" class="logo__image only-light" alt="Matematika Diskrit - Home"/>
     <script>document.write(`<img src="_static/download.png" class="logo__image only-dark" alt="Matematika Diskrit - Home"/>`);</script>
-  
+  <div class="image-box">
+      <img src="kevin1.jpg" alt="Scatter Plot Iris">
+  </div>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,22 +181,29 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="Algoritma.html">Algoritma dari sequrential search dan binary search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aljabar.html">Aljabar boolean</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="Himpunan.html">HIMPUNAN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="LOGIKA.html">NEGASI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aljabar.html">penjelasan pendata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Algoritma.html">data iris</a></li>
 
 
+<li class="toctree-l1"><a class="reference internal" href="Himpunan.html">data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LOGIKA.html">Jarak</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DERET DAN REKURSI.html">KNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UAS.html">Contoh Soal Mencari Data Missing</a></li>
 
 
-<li class="toctree-l1"><a class="reference internal" href="Centrality%20graph.html">Social Network Analysis</a></li>
 
-<li class="toctree-l1"><a class="reference internal" href="DERET%20DAN%20REKURSI.html">12
-(deret geometri)
+
+<!-- <li class="toctree-l1"><a class="reference internal" href="Centrality%20graph.html">Social Network Analysis</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="PR_UNTUK_DERET.html">pr</a></li> -->
+<li class="toctree-l1"><a class="reference internal" href="Naive_bayes.html">Pengertian naive bayes</a></li>
+
+<!-- (deret geometri)
 (deret aritmetika)
-13</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">pr</a></li>
+13</a></li> --> -->
+<li class="toctree-l1"><a class="reference internal" href="UAS.html">UTS</a></li>
+<!-- <li class="toctree-l1"><a class="reference internal" href="PR_UNTUK_DERET.html">pr</a></li> -->
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">naive bayes analisis</a></li>
 </ul>
 
     </div>
@@ -266,7 +275,7 @@
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FPR_UNTUK_DERET.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FNaive_bayes.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -296,7 +305,7 @@
       
       
       
-      <li><a href="_sources/PR_UNTUK_DERET.md" target="_blank"
+      <li><a href="_sources/Naive_bayes.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -367,7 +376,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -378,11 +389,32 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>pr</h1>
+    <h1>Pengertian naive bayes</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#keuntungan-menggunakan-naive-bayes">Keuntungan menggunakan naive bayes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagaimana-kemungkinan-probabilitas-usia-paruh-baya-tekanan-darah-sangat-tinggi-kemungkinan-penyakit-hipertensi-h-atau-tidak-t">Bagaimana kemungkinan/probabilitas usia paruh baya tekanan darah sangat tinggi  kemungkinan penyakit Hipertensi (H) atau Tidak (T):</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tipe-algoritma-naive-bayes">Tipe Algoritma Naive Bayes :</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bernoulli-naive-bayes">Bernoulli Naive Bayes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#naive-bayes-multinomial">Naive Bayes Multinomial</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-naive-bayes">Gaussian Naive Bayes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teorema-naive-bayes">Teorema Naive Bayes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-probability-probabilitas-posterior">1. Posterior Probability (Probabilitas Posterior)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prior">2. Prior</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#likelihood">3. Likelihood</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -392,13 +424,94 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="pr">
-<h1>pr<a class="headerlink" href="#pr" title="Link to this heading">#</a></h1>
-<p><img alt="" src="https://cdn.mathpix.com/snip/images/Fi_Q4jzsZ9TiUX9vYJ3UCTXVI9vm89z3r0tgvE3SBmM.original.fullsize.png" /></p>
-<p><img alt="" src="https://cdn.mathpix.com/snip/images/nP84MfZoDmmNQ1McroGlmITrvs2nQZoX7kI9SgbYd8A.original.fullsize.png" /></p>
-<p><img alt="" src="https://cdn.mathpix.com/snip/images/R3TrzDore-hotKwywPyM8qQ6kb-BuoUD8AniBDuxeWM.original.fullsize.png" /></p>
-<p><img alt="" src="https://cdn.mathpix.com/snip/images/zAZPDyk8ELjdMagFigcVuhVJc0lmZpkubdkJGokDS6M.original.fullsize.png" /></p>
+  <section id="pengertian-naive-bayes">
+```html
+<!-- ===================== DECISION TREE SECTION ===================== -->
+<section style="padding:40px; font-family:Arial, sans-serif; line-height:1.6;">
+
+  <h2 style="color:#2c3e50;">Random Forest</h2>
+
+  <h2 style="color:#2c3e50;">Langkah-langkah Random Forest di KNIME</h2>
+
+  <p>Hasil Statistik Random Forest dan Decision Tree
+  </p>
+
+  <ol>
+    <li>
+      <b>Import Data</b><br>
+      Gunakan node seperti <i>CSV Reader</i> atau <i>Excel Reader</i> 
+      untuk memasukkan dataset ke dalam KNIME.
+    </li>
+    <div class="image-box">
+        <img src="tabel_data.png" alt="Scatter Plot Iris">            
+    </div>
+
+    <li>
+      <b>Partitioning Data</b><br>
+      Gunakan node <i>Partitioning</i> untuk membagi data menjadi:
+      <ul>
+        <li>Data Training (90% - 10%)</li>
+        <li>Data Testing (10% - 90%)</li>
+      </ul>
+    </li>
+    <div class="image-box">
+        <img src="struktur dan partitioner.png" alt="Scatter Plot Iris">            
+    </div>
+
+    <li>
+      <b>Membuat Model</b><br>
+      Tambahkan node <i>Decision Tree Learner</i>, lalu:
+      <ul>
+        <li>Pilih kolom target (kelas)</li>
+        <li>Pilih metode (Gini Index / Information Gain)</li>
+      </ul>
+    </li>
+
+    <li>
+      <b>Menampilkan Decision Tree</b><br>
+      Setelah node dijalankan:
+      <ul>
+        <li>Klik kanan pada node <i>Decision Tree Learner</i></li>
+        <li>Pilih <b>"View: Decision Tree"</b></li>
+      </ul>
+    </li>
+    <div class="image-box">
+         <img src="decision tree.png" alt="Scatter Plot Iris">            
+    </div>
+
+    <li>
+      <b>Prediksi Data</b><br>
+      Gunakan node <i>Decision Tree Predictor</i> untuk menguji model 
+      dengan data testing.
+    </li>
+    <div class="image-box">
+        <img src="predictor.png" alt="Scatter Plot Iris">            
+    </div>
+
+    <li>
+      <b>Evaluasi Model</b><br>
+      Gunakan node <i>Scorer</i> untuk melihat akurasi, precision, dan recall.
+    </li>
+    <div class="image-box">
+        <img src="c1.png" alt="Scatter Plot Iris">            
+        <img src="acuraccy.png" alt="Scatter Plot Iris">            
+    </div>
+  </ol>
+
+  <hr>
+
+  <h2 style="color:#2c3e50;">Kesimpulan</h2>
+
+  <p>
+    Decision Tree merupakan metode yang mudah dipahami karena berbentuk 
+    struktur pohon dan aturan keputusan yang jelas. Dengan menggunakan KNIME, 
+    proses pembuatan model menjadi lebih sederhana karena tidak memerlukan coding 
+    secara langsung, cukup dengan menyusun workflow.
+  </p>
+
 </section>
+<!-- ===================== END SECTION ===================== -->
+    
 
     <script type="text/x-thebe-config">
     {
@@ -431,15 +544,12 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="DERET%20DAN%20REKURSI.html"
+       href="PR_UNTUK_DERET.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">12
-(deret geometri)
-(deret aritmetika)
-13</p>
+        <p class="prev-next-title">pr</p>
       </div>
     </a>
 </div>
@@ -448,6 +558,34 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#keuntungan-menggunakan-naive-bayes">Keuntungan menggunakan naive bayes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagaimana-kemungkinan-probabilitas-usia-paruh-baya-tekanan-darah-sangat-tinggi-kemungkinan-penyakit-hipertensi-h-atau-tidak-t">Bagaimana kemungkinan/probabilitas usia paruh baya tekanan darah sangat tinggi  kemungkinan penyakit Hipertensi (H) atau Tidak (T):</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tipe-algoritma-naive-bayes">Tipe Algoritma Naive Bayes :</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bernoulli-naive-bayes">Bernoulli Naive Bayes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#naive-bayes-multinomial">Naive Bayes Multinomial</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-naive-bayes">Gaussian Naive Bayes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teorema-naive-bayes">Teorema Naive Bayes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#posterior-probability-probabilitas-posterior">1. Posterior Probability (Probabilitas Posterior)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prior">2. Prior</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#likelihood">3. Likelihood</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
