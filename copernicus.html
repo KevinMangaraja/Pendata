@@ -430,7 +430,76 @@ document.write(`
         kemudian dilakukan agregasi temporal harian dan agregasi spasial
         untuk memperoleh nilai rata-rata NO₂ pada wilayah penelitian.
     </p>
+        <table border="1" style="width:100%; border-collapse:collapse;">
+        <tr>
+            <th>Kode Program</th>
+        </tr>
+        <tr>
+            <td>
+<pre><code>
+aoi = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              97.7990984,
+              0.5823376
+            ],
+            [
+              97.8427489,
+              0.5791454
+            ],
+            [
+              97.8334551,
+              0.5450472
+            ],
+            [
+              97.7937526,
+              0.5477117
+            ],
+            [
+              97.7990984,
+              0.5823376
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
 
+s5post = connection.load_collection(
+    "SENTINEL_5P_L2",
+    temporal_extent=["2023-05-05", "2026-05-05"],
+    spatial_extent={
+        "west": 112.68,
+        "south": -7.20,
+        "east": 113.09,
+        "north": -6.89
+    },
+    bands=["NO2"],
+)
+
+# Now aggregate by day to avoid having multiple data per day
+s5p_no2_daily = s5post.aggregate_temporal_period(reducer="mean", period="day")
+
+# Now create a spatial aggregation to generate mean timeseries data
+s5p_no2_aoi = s5p_no2_daily.aggregate_spatial(reducer="mean", geometries=aoi)
+job = s5post.execute_batch(title="NO2 in Telukdalam", outputfile="NO2Telukdalam.nc")
+</code></pre>
+            </td>
+        </tr>
+    </table>
+
+    <div class="figure-placeholder">
+        <img src="h1.png" alt="Gambar 1">
+    </div>
     <table border="1" style="width:100%; border-collapse:collapse;">
         <tr>
             <th>Kode Program</th>
@@ -482,8 +551,8 @@ print(no2[0][0][0])
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
-        <p><strong>Gambar 1.</strong> Hasil pengambilan data NO₂ menggunakan Copernicus Sentinel-5P.</p>
+        <img src="h2.png" alt="Gambar 1">
+        <p>Hasil pengambilan data NO₂ menggunakan Copernicus Sentinel-5P.</p>
     </div>
 
     <ol type="a">
@@ -519,10 +588,6 @@ for i in range(no2.shape[1]):     # 9 baris
         </tr>
     </table>
 
-    <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
-    </div>
-
         <li>
             <strong>Merata-ratakan Data dan Mengubah Format Datetime</strong>
             <p>
@@ -548,10 +613,6 @@ for i in range(len(dates)):
             </td>
         </tr>
     </table>
-
-    <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
-    </div>
         <li>
             <strong>Menyimpan Data dalam Bentuk CSV</strong>
             <p>
@@ -577,10 +638,6 @@ df.to_csv("NO2_Bangkalan_timeseries.csv", index=False)
             </td>
         </tr>
     </table>
-
-    <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
-    </div>
         
 
         <li>
@@ -622,7 +679,7 @@ print(missing_dates)
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h3.png" alt="Gambar 1">
     </div>
           <table border="1" style="width:100%; border-collapse:collapse;">
         <tr>
@@ -658,7 +715,7 @@ df.to_csv("no2_timeseries_interpolated.csv")
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h4.png" alt="Gambar 1">
     </div>
 
         <li>
@@ -702,10 +759,6 @@ print(outliers_iqr[['date', 'NO2']].head())
             </td>
         </tr>
     </table>
-
-    <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
-    </div>
     </ol>
         <table border="1" style="width:100%; border-collapse:collapse;">
         <tr>
@@ -743,7 +796,7 @@ plt.show()
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h5.png" alt="Gambar 1">
     </div>
         <table border="1" style="width:100%; border-collapse:collapse;">
         <tr>
@@ -769,10 +822,6 @@ print("Jumlah missing setelah interpolasi:", df['NO2_filled'].isna().sum())
             </td>
         </tr>
     </table>
-
-    <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
-    </div>
         <table border="1" style="width:100%; border-collapse:collapse;">
         <tr>
             <th>Kode Program</th>
@@ -802,7 +851,7 @@ plt.show()
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h6.png" alt="Gambar 1">
     </div>
 
     <h2>3. Modeling Menggunakan KNN Regression</h2>
@@ -853,7 +902,7 @@ print(correlations)
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h7.png" alt="Gambar 1">
     </div>
     <strong>NORMALISAI DATA</strong>
         <table border="1" style="width:100%; border-collapse:collapse;">
@@ -875,7 +924,7 @@ df['NO2_scaled'] = scaler.fit_transform(df[['NO2']])
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h8.png" alt="Gambar 1">
     </div>
     <strong>MENGUBAH DATA</strong>
         <table border="1" style="width:100%; border-collapse:collapse;">
@@ -895,7 +944,7 @@ print(supervised_df.shape)
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h9.png" alt="Gambar 1">
     </div>
         <table border="1" style="width:100%; border-collapse:collapse;">
         <tr>
@@ -914,7 +963,7 @@ print(supervised_df10.shape)
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h10.png" alt="Gambar 1">
     </div>
     <strong>MODELING DAN EVALUATION</strong>
         <table border="1" style="width:100%; border-collapse:collapse;">
@@ -978,7 +1027,7 @@ knn_10, y_test_10, y_pred_10 = train_knn(supervised_df10, "KNN - 10 Hari Sebelum
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h11.png" alt="Gambar 1">
     </div>
     <strong>PLOTTING</strong>
         <table border="1" style="width:100%; border-collapse:collapse;">
@@ -1005,7 +1054,7 @@ plt.show()
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h12.png" alt="Gambar 1">
     </div>
         <table border="1" style="width:100%; border-collapse:collapse;">
         <tr>
@@ -1028,7 +1077,7 @@ plt.show()
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h13.png" alt="Gambar 1">
     </div>
         <table border="1" style="width:100%; border-collapse:collapse;">
         <tr>
@@ -1086,7 +1135,7 @@ plt.show()
     </table>
 
     <div class="figure-placeholder">
-        <img src="foto.png" alt="Gambar 1">
+        <img src="h14.png" alt="Gambar 1">
     </div>
     <h2>4. Evaluasi dan Visualisasi Hasil</h2>
     <p>
