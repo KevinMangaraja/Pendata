@@ -418,129 +418,80 @@ document.write(`
 </div>
 <!-- ================= REGRESI LINIER SKLEARN ================= -->
 
-<section>
+<section id="alur-proyek">
 
-  <h2>
-    Regresi Linier Menggunakan Sklearn
-  </h2>
+    <h2>1. Pengumpulan Data</h2>
+    <p>
+        Data yang digunakan dalam penelitian ini berupa data konsentrasi Nitrogen Dioksida (NO₂)
+        yang diperoleh dari citra satelit Sentinel-5P melalui platform OpenEO.
+        Data dikumpulkan dalam rentang waktu 05 mei 2023 hingga 05 mei 2026
+        untuk wilayah kota Pasar Telukdalam. Hasil pengambilan data kemudian disimpan
+        dalam format NetCDF untuk selanjutnya diproses dan dianalisis.
+    </p>
 
-  <p>
-    Proyek ini digunakan untuk melakukan analisis data menggunakan metode
-    <b>Regresi Linier</b> dengan library
-    <b>LinearRegression</b> dari sklearn.
-  </p>
+    <h2>2. Preprocessing Data</h2>
 
-  <!-- DATA -->
-  <h3>Data</h3>
+    <ol type="a">
+        <li>
+            <strong>Mengatasi Missing Value menggunakan Metode Interpolasi Linear</strong>
+            <p>
+                Data yang memiliki nilai kosong (missing value) diperbaiki menggunakan
+                metode interpolasi linear agar setiap tanggal memiliki nilai NO₂ yang lengkap.
+            </p>
+        </li>
 
-  <table border="1" cellpadding="10" cellspacing="0" width="100%" style="border-collapse:collapse; text-align:center;">
-    <tr style="background:#3498db; color:white;">
-      <th>Titik</th>
-      <th>X</th>
-      <th>Y</th>
-    </tr>
+        <li>
+            <strong>Merata-ratakan Data dan Mengubah Format Datetime</strong>
+            <p>
+                Data NO₂ dirata-ratakan menjadi data harian dan kolom tanggal diubah ke
+                format datetime untuk mempermudah analisis deret waktu (time series).
+            </p>
+        </li>
 
-    <tr><td>A</td><td>2</td><td>2</td></tr>
-    <tr><td>B</td><td>4</td><td>3</td></tr>
-    <tr><td>C</td><td>5</td><td>5</td></tr>
-    <tr><td>D</td><td>3</td><td>4</td></tr>
-    <tr><td>E</td><td>3</td><td>3</td></tr>
-    <tr><td>F</td><td>4</td><td>5</td></tr>
-    <tr><td>G</td><td>5</td><td>6</td></tr>
-  </table>
+        <li>
+            <strong>Menyimpan Data dalam Bentuk CSV</strong>
+            <p>
+                Data hasil preprocessing disimpan ke dalam format CSV agar mudah digunakan
+                pada tahap analisis dan pemodelan selanjutnya.
+            </p>
+        </li>
 
-  <!-- RUMUS -->
-  <h3 style="margin-top:30px;">Rumus Regresi Linier</h3>
+        <li>
+            <strong>Pengecekan Missing Value Data Harian pada CSV</strong>
+            <p>
+                Dilakukan pengecekan kembali untuk memastikan tidak terdapat tanggal
+                yang hilang maupun nilai kosong pada data harian yang telah disimpan.
+            </p>
+        </li>
 
-  <div >
-    β̂ = (X<sup>T</sup>X)<sup>-1</sup> X<sup>T</sup>Y
-  </div>
+        <li>
+            <strong>Deteksi Outlier Menggunakan Metode IQR</strong>
+            <p>
+                Outlier dideteksi menggunakan metode Interquartile Range (IQR) dengan
+                menghitung Q1, Q3, dan IQR untuk mengidentifikasi data yang berada di luar
+                rentang normal distribusi data.
+            </p>
+        </li>
+    </ol>
 
-  <!-- CODE -->
-  <h3 style="margin-top:30px;">Program Python Menggunakan Sklearn</h3>
+    <h2>3. Modeling Menggunakan KNN Regression</h2>
+    <p>
+        Setelah data melalui tahap preprocessing, dilakukan pemodelan menggunakan
+        algoritma K-Nearest Neighbors (KNN) Regression. Model dibangun dengan memanfaatkan
+        data historis NO₂ sebagai fitur prediktor untuk memprediksi nilai NO₂ pada periode berikutnya.
+        Nilai parameter K dipilih berdasarkan hasil evaluasi model untuk memperoleh tingkat
+        akurasi terbaik. Kinerja model dievaluasi menggunakan metrik seperti MAE, MSE,
+        RMSE, dan R² Score.
+    </p>
 
-  <pre style="
-    background:#272822;
-    color:#f8f8f2;
-    padding:20px;
-    border-radius:10px;
-    overflow-x:auto;
-  ">
-from sklearn.linear_model import LinearRegression
-import numpy as np
-
-# Data
-X = np.array([2,4,5,3,3,4,5]).reshape(-1,1)
-Y = np.array([2,3,5,4,3,5,6])
-
-# Membuat model
-model = LinearRegression()
-
-# Training model
-model.fit(X, Y)
-
-# Mengambil koefisien
-intercept = model.intercept_
-slope = model.coef_[0]
-
-# Output
-print("Intercept =", intercept)
-print("Koefisien =", slope)
-
-# Prediksi
-prediksi = model.predict([[6]])
-
-print("Prediksi X=6 :", prediksi[0])
-  </pre>
-
-  <!-- PENJELASAN -->
-  <h3 style="margin-top:30px;">Penjelasan Kode</h3>
-
-  <ul>
-    <li><b>LinearRegression()</b> digunakan untuk membuat model regresi linier.</li>
-
-    <li><b>fit(X,Y)</b> digunakan untuk melatih model menggunakan data.</li>
-
-    <li><b>intercept_</b> digunakan untuk mengambil nilai konstanta.</li>
-
-    <li><b>coef_</b> digunakan untuk mengambil nilai slope.</li>
-
-    <li><b>predict()</b> digunakan untuk melakukan prediksi data baru.</li>
-  </ul>
-
-  <!-- HASIL -->
-  <h3 style="margin-top:30px;">Hasil Regresi</h3>
-
-  <div>
-
-    <p><b>Intercept (a)</b> = 0.14</p>
-
-    <p><b>Koefisien (b)</b> = 1.00</p>
-
-    <h2 style="color:green;">
-      Persamaan Regresi:
-      Y = 0.14 + 1.00X
-    </h2>
-
-  </div>
-  <div class="image-box">
-      <h4>hasil regresi linear di software geogebra</h4>
-      <img src="regresi.png" alt="Scatter Plot Iris">
-  </div>
-
-  <!-- KESIMPULAN -->
-  <h3 style="margin-top:30px;">Kesimpulan</h3>
-
-  <p>
-    Berdasarkan hasil analisis menggunakan metode Regresi Linier,
-    diperoleh hubungan positif antara variabel X dan Y.
-    Semakin besar nilai X maka nilai Y juga meningkat.
-    Persamaan regresi yang diperoleh adalah
-    <b>Y = 0.14 + 1.00X</b>.
-    Program berhasil dibuat menggunakan library
-    <b>LinearRegression</b> dari sklearn dan hasilnya sesuai
-    dengan perhitungan analitik regresi linier.
-  </p>
+    <h2>4. Evaluasi dan Visualisasi Hasil</h2>
+    <p>
+        Hasil prediksi dari model KNN Regression dibandingkan dengan data aktual untuk
+        mengukur performa model. Selain itu, dilakukan visualisasi dalam bentuk grafik
+        time series agar pola perubahan konsentrasi NO₂ dan hasil prediksi dapat diamati
+        dengan lebih jelas. Tahap ini digunakan untuk menilai kemampuan model dalam
+        merepresentasikan kondisi data sebenarnya.
+    </p>
 
 </section>
 
