@@ -418,73 +418,86 @@ document.write(`
 </div>
 <!-- ================= REGRESI LINIER SKLEARN ================= -->
 
-<section id="alur-proyek">
+<section id="pengambilan-data-no2">
 
-    <h2>1. Pengumpulan Data</h2>
+    <h2>A. Pengambilan Data NO₂ Menggunakan Copernicus Sentinel-5P</h2>
+
     <p>
-        Data yang digunakan dalam penelitian ini berupa data konsentrasi Nitrogen Dioksida (NO₂)
-        yang diperoleh dari citra satelit Sentinel-5P melalui platform OpenEO.
-        Data dikumpulkan dalam rentang waktu 05 mei 2023 hingga 05 mei 2026
-        untuk wilayah kota Pasar Telukdalam. Hasil pengambilan data kemudian disimpan
-        dalam format NetCDF untuk selanjutnya diproses dan dianalisis.
+        Pada tahap ini dilakukan pengambilan data Nitrogen Dioksida (NO₂) menggunakan
+        layanan Copernicus Sentinel-5P melalui library OpenEO. Area penelitian
+        ditentukan menggunakan Area of Interest (AOI) berbentuk polygon.
+        Selanjutnya data NO₂ diambil berdasarkan rentang waktu tertentu,
+        kemudian dilakukan agregasi temporal harian dan agregasi spasial
+        untuk memperoleh nilai rata-rata NO₂ pada wilayah penelitian.
     </p>
-    <textarea readonly>
-            aoi = {
-        "type": "FeatureCollection",
-        "features": [
-          {
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-              "type": "Polygon",
-              "coordinates": [
-                [
-                  [
-                    97.7990984,
-                    0.5823376
-                  ],
-                  [
-                    97.8427489,
-                    0.5791454
-                  ],
-                  [
-                    97.8334551,
-                    0.5450472
-                  ],
-                  [
-                    97.7937526,
-                    0.5477117
-                  ],
-                  [
-                    97.7990984,
-                    0.5823376
-                  ]
-                ]
-              ]
-            }
-          }
+
+    <table border="1" style="width:100%; border-collapse:collapse;">
+        <tr>
+            <th>Kode Program</th>
+        </tr>
+        <tr>
+            <td>
+<pre><code>
+aoi = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [97.7990984, 0.5823376],
+            [97.8427489, 0.5791454],
+            [97.8334551, 0.5450472],
+            [97.7937526, 0.5477117],
+            [97.7990984, 0.5823376]
+          ]
         ]
       }
-      
-      s5post = connection.load_collection(
-          "SENTINEL_5P_L2",
-          temporal_extent=["2023-05-05", "2026-05-05"],
-          spatial_extent={
-              "west": 112.68,
-              "south": -7.20,
-              "east": 113.09,
-              "north": -6.89
-          },
-          bands=["NO2"],
-      )
-      
-      # Now aggregate by day to avoid having multiple data per day
-      s5p_no2_daily = s5post.aggregate_temporal_period(reducer="mean", period="day")
-      
-      # Now create a spatial aggregation to generate mean timeseries data
-      s5p_no2_aoi = s5p_no2_daily.aggregate_spatial(reducer="mean", geometries=aoi)
-      job = s5post.execute_batch(title="NO2 in Telukdalam", outputfile="NO2Telukdalam.nc")
-    </textarea>
+    }
+  ]
+}
+
+s5post = connection.load_collection(
+    "SENTINEL_5P_L2",
+    temporal_extent=["2023-05-05", "2026-05-05"],
+    spatial_extent={
+        "west": 112.68,
+        "south": -7.20,
+        "east": 113.09,
+        "north": -6.89
+    },
+    bands=["NO2"],
+)
+
+# Agregasi temporal harian
+s5p_no2_daily = s5post.aggregate_temporal_period(
+    reducer="mean",
+    period="day"
+)
+
+# Agregasi spasial berdasarkan AOI
+s5p_no2_aoi = s5p_no2_daily.aggregate_spatial(
+    reducer="mean",
+    geometries=aoi
+)
+
+# Menjalankan proses dan menyimpan hasil
+job = s5post.execute_batch(
+    title="NO2 in Telukdalam",
+    outputfile="NO2Telukdalam.nc"
+)
+</code></pre>
+            </td>
+        </tr>
+    </table>
+
+    <div class="figure-placeholder">
+        <img src="1.png" alt="Gambar 1">
+        <p><strong>Gambar 1.</strong> Hasil pengambilan data NO₂ menggunakan Copernicus Sentinel-5P.</p>
+    </div>
 
     <h2>2. Preprocessing Data</h2>
 
