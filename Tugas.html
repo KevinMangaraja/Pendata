@@ -854,6 +854,369 @@ forecaster.fit(
     <p>
         Model berhasil dilatih menggunakan 7 lag terakhir dan suhu sebagai fitur tambahan.
     </p>
+    <hr>
+
+<h2>Bagian 3: Feature Importance (LightGBM)</h2>
+
+<h3>Apa itu Feature Importance?</h3>
+
+<p>
+    Feature Importance adalah ukuran seberapa besar kontribusi suatu fitur
+    dalam membantu model membuat keputusan prediksi.
+</p>
+
+<p>Dalam LightGBM, importance dihitung berdasarkan:</p>
+
+<ul>
+    <li><strong>Gain</strong> → penurunan error saat fitur digunakan.</li>
+    <li><strong>Split Count</strong> → frekuensi fitur digunakan pada pohon keputusan.</li>
+</ul>
+
+<p>
+    Semakin tinggi nilainya, semakin penting fitur tersebut bagi model.
+</p>
+
+<h3>Ekstraksi Feature Importance</h3>
+
+<pre><code>
+feat_imp = forecaster.get_feature_importances()
+display(feat_imp)
+</code></pre>
+
+<h3>Hasil Feature Importance</h3>
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Feature</th>
+            <th>Importance</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>Temperature</td><td>535</td></tr>
+        <tr><td>lag_1</td><td>471</td></tr>
+        <tr><td>lag_2</td><td>377</td></tr>
+        <tr><td>lag_7</td><td>347</td></tr>
+        <tr><td>lag_3</td><td>345</td></tr>
+        <tr><td>lag_6</td><td>319</td></tr>
+        <tr><td>lag_4</td><td>311</td></tr>
+        <tr><td>lag_5</td><td>295</td></tr>
+    </tbody>
+</table>
+
+<p>
+    Berdasarkan hasil tersebut, Temperature dan lag_1 menjadi fitur
+    yang paling berpengaruh terhadap prediksi permintaan listrik.
+</p>
+
+<hr>
+
+<h2>Bagian 4: Matriks Pelatihan (Training Matrix)</h2>
+
+<p>
+    Sebelum menjalankan SHAP, kita perlu mengakses matriks pelatihan
+    yang digunakan model.
+</p>
+
+<pre><code>
+X_train, y_train = forecaster.create_train_X_y(
+    y=data_train['Demand'],
+    exog=data_train['Temperature']
+)
+</code></pre>
+
+<h3>Struktur Data Training</h3>
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Kolom</th>
+            <th>Keterangan</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>lag_1</td><td>Demand hari sebelumnya</td></tr>
+        <tr><td>lag_2</td><td>Demand dua hari sebelumnya</td></tr>
+        <tr><td>lag_3</td><td>Demand tiga hari sebelumnya</td></tr>
+        <tr><td>lag_4</td><td>Demand empat hari sebelumnya</td></tr>
+        <tr><td>lag_5</td><td>Demand lima hari sebelumnya</td></tr>
+        <tr><td>lag_6</td><td>Demand enam hari sebelumnya</td></tr>
+        <tr><td>lag_7</td><td>Demand tujuh hari sebelumnya</td></tr>
+        <tr><td>Temperature</td><td>Suhu rata-rata harian</td></tr>
+    </tbody>
+</table>
+
+<p>
+    Output model adalah nilai Demand pada hari ke-t.
+</p>
+
+<h3>Korelasi dengan Target</h3>
+
+<pre><code>
+corr_matrix = pd.concat([X_train, y_train], axis=1).corr()
+</code></pre>
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Feature</th>
+            <th>Korelasi</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>lag_1</td><td>0.6810</td></tr>
+        <tr><td>lag_7</td><td>0.5681</td></tr>
+        <tr><td>lag_6</td><td>0.4437</td></tr>
+        <tr><td>lag_2</td><td>0.2864</td></tr>
+        <tr><td>Temperature</td><td>0.0339</td></tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h2>Bagian 5: Analisis SHAP</h2>
+
+<h3>Konsep SHAP</h3>
+
+<p>
+    SHAP (SHapley Additive exPlanations) merupakan metode explainability
+    berbasis teori permainan yang menjelaskan kontribusi setiap fitur
+    terhadap hasil prediksi model.
+</p>
+
+<h3>Formula SHAP</h3>
+
+<blockquote>
+    Prediksi = Base Value + SHAP(lag_1) + SHAP(lag_2) + ... + SHAP(Temperature)
+</blockquote>
+
+<h3>Kelebihan SHAP</h3>
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Aspek</th>
+            <th>Feature Importance</th>
+            <th>SHAP</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Arah Pengaruh</td>
+            <td>Tidak Ada</td>
+            <td>Ada</td>
+        </tr>
+        <tr>
+            <td>Penjelasan Lokal</td>
+            <td>Tidak</td>
+            <td>Ya</td>
+        </tr>
+        <tr>
+            <td>Penjelasan Global</td>
+            <td>Ya</td>
+            <td>Ya</td>
+        </tr>
+        <tr>
+            <td>Interaksi Fitur</td>
+            <td>Tidak</td>
+            <td>Dapat Dianalisis</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Membuat SHAP Explainer</h3>
+
+<pre><code>
+explainer = shap.TreeExplainer(
+    forecaster.estimator
+)
+
+shap_values = explainer.shap_values(X_train)
+</code></pre>
+
+<h3>Base Value</h3>
+
+<p>
+    Base Value merupakan rata-rata prediksi model pada seluruh data training.
+</p>
+
+<blockquote>
+    Base Value = 223820.31 MWh
+</blockquote>
+
+<h3>SHAP Summary Plot</h3>
+
+<p>
+    Summary Plot menunjukkan fitur yang paling berpengaruh secara global.
+</p>
+
+<ul>
+    <li>Temperature memiliki kontribusi sangat tinggi.</li>
+    <li>lag_1 menjadi fitur historis paling penting.</li>
+    <li>lag_7 menunjukkan adanya pola mingguan.</li>
+</ul>
+
+<h3>SHAP Beeswarm Plot</h3>
+
+<p>
+    Beeswarm Plot memperlihatkan arah kontribusi setiap fitur.
+</p>
+
+<ul>
+    <li>Merah = nilai fitur tinggi.</li>
+    <li>Biru = nilai fitur rendah.</li>
+    <li>Kanan = meningkatkan prediksi.</li>
+    <li>Kiri = menurunkan prediksi.</li>
+</ul>
+
+<h3>SHAP Dependence Plot</h3>
+
+<p>
+    Dependence Plot menunjukkan hubungan antara Temperature dan nilai SHAP.
+</p>
+
+<p>
+    Ditemukan pola U, yaitu suhu sangat panas maupun sangat dingin
+    sama-sama meningkatkan konsumsi listrik.
+</p>
+
+<hr>
+
+<h2>Bagian 6: Explainability pada Prediksi Masa Depan</h2>
+
+<h3>Membuat Forecast</h3>
+
+<pre><code>
+predictions = forecaster.predict(
+    steps=10,
+    exog=exog_predict
+)
+</code></pre>
+
+<h3>Hasil Forecast</h3>
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Tanggal</th>
+            <th>Prediksi Demand</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>2025-04-09</td><td>166580.49</td></tr>
+        <tr><td>2025-04-10</td><td>177411.89</td></tr>
+        <tr><td>2025-04-11</td><td>179771.77</td></tr>
+        <tr><td>2025-04-12</td><td>175727.97</td></tr>
+    </tbody>
+</table>
+
+<h3>Analisis SHAP Prediksi Pertama</h3>
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Feature</th>
+            <th>SHAP Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>lag_1</td><td>-30650.19</td></tr>
+        <tr><td>lag_7</td><td>-9739.76</td></tr>
+        <tr><td>Temperature</td><td>-7108.53</td></tr>
+        <tr><td>lag_6</td><td>-6757.57</td></tr>
+    </tbody>
+</table>
+
+<p>
+    Nilai SHAP negatif menunjukkan fitur tersebut menurunkan prediksi
+    dibandingkan nilai rata-rata model.
+</p>
+
+<hr>
+
+<h2>Bagian 7: Permutation Importance dan Partial Dependence Plot</h2>
+
+<h3>Permutation Importance</h3>
+
+<p>
+    Metode ini mengukur pentingnya fitur dengan cara mengacak nilainya
+    lalu melihat penurunan performa model.
+</p>
+
+<h3>Hasil Permutation Importance</h3>
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Feature</th>
+            <th>Importance</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>lag_1</td><td>0.6423</td></tr>
+        <tr><td>Temperature</td><td>0.3992</td></tr>
+        <tr><td>lag_7</td><td>0.1932</td></tr>
+        <tr><td>lag_2</td><td>0.1249</td></tr>
+    </tbody>
+</table>
+
+<h3>Partial Dependence Plot (PDP)</h3>
+
+<p>
+    PDP memperlihatkan pengaruh rata-rata suatu fitur terhadap hasil prediksi.
+</p>
+
+<ul>
+    <li>Temperature menunjukkan pola non-linear.</li>
+    <li>lag_1 memiliki pengaruh paling kuat.</li>
+    <li>ICE Lines menunjukkan variasi antar observasi.</li>
+</ul>
+
+<hr>
+
+<h2>Bagian 8: Kesimpulan</h2>
+
+<p>
+    Berdasarkan seluruh metode explainability yang digunakan,
+    ditemukan bahwa <strong>Temperature</strong> dan
+    <strong>lag_1</strong> merupakan faktor paling dominan
+    dalam mempengaruhi permintaan listrik harian.
+</p>
+
+<h3>Rangkuman Jawaban Pertanyaan</h3>
+
+<ol>
+    <li>
+        Analisis digunakan untuk memprediksi permintaan listrik harian
+        di Victoria, Australia.
+    </li>
+    <li>
+        Data training terdiri dari lag_1 hingga lag_7 dan Temperature,
+        dengan target berupa Demand.
+    </li>
+    <li>
+        Lag adalah nilai historis pada periode sebelumnya yang digunakan
+        sebagai fitur prediksi.
+    </li>
+    <li>
+        Analisis dilakukan melalui:
+        <ul>
+            <li>Persiapan Data</li>
+            <li>Pelatihan ForecasterRecursive</li>
+            <li>Feature Importance</li>
+            <li>SHAP Analysis</li>
+            <li>Permutation Importance</li>
+            <li>Partial Dependence Plot</li>
+        </ul>
+    </li>
+</ol>
+
+<div class="alert alert-success">
+    <strong>Kesimpulan Utama:</strong>
+    Ketiga metode explainability (Feature Importance, SHAP, dan Permutation Importance)
+    memberikan hasil yang konsisten bahwa Temperature dan lag_1 adalah
+    prediktor paling penting dalam model forecasting permintaan listrik.
+</div>
 
 </section>
 
