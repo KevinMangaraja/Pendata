@@ -629,25 +629,231 @@ document.write(`
     Library yang digunakan dalam analisis ini:
   </p>
 
-  <ul>
-    <li>
-      <strong>skforecast</strong> – Framework forecasting time series
-      berbasis scikit-learn.
-    </li>
-    <li>
-      <strong>lightgbm</strong> – Model gradient boosting berbasis pohon
-      yang cepat dan efisien.
-    </li>
-    <li>
-      <strong>shap</strong> – Library untuk menjelaskan prediksi model
-      menggunakan Shapley Values.
-    </li>
-    <li>
-      <strong>sklearn.inspection</strong> – Digunakan untuk
-      Permutation Importance dan Partial Dependence Plot.
-    </li>
-  </ul>
-</section>
+    <h1>Forecaster Explainability: Feature Importance, SHAP Values, dan Partial Dependence Plots</h1>
+
+    <p>
+        Notebook ini membahas explainability pada model forecasting menggunakan
+        <strong>Skforecast</strong>, <strong>LightGBM</strong>, dan
+        <strong>SHAP</strong> untuk memprediksi permintaan listrik harian di Victoria, Australia.
+    </p>
+
+    <hr>
+
+    <h2>Bagian 1: Instalasi Library dan Import Data</h2>
+
+    <h3>1.1 Instalasi dan Import Library</h3>
+
+    <p>Berikut adalah library yang dibutuhkan dalam analisis ini:</p>
+
+    <ul>
+        <li><strong>skforecast</strong> : Framework forecasting time series berbasis scikit-learn.</li>
+        <li><strong>lightgbm</strong> : Model Gradient Boosting berbasis pohon yang cepat dan efisien.</li>
+        <li><strong>shap</strong> : Library explainability menggunakan konsep Shapley Value.</li>
+        <li><strong>sklearn.inspection</strong> : Digunakan untuk Permutation Importance dan Partial Dependence Plot.</li>
+    </ul>
+
+    <pre><code>
+import pandas as pd
+import matplotlib.pyplot as plt
+import shap
+
+from sklearn.inspection import permutation_importance
+from sklearn.inspection import PartialDependenceDisplay
+
+from lightgbm import LGBMRegressor
+
+from skforecast.datasets import fetch_dataset
+from skforecast.recursive import ForecasterRecursive
+
+print("Semua library berhasil diimport!")
+    </code></pre>
+
+    <h3>1.2 Unduh dan Eksplorasi Dataset</h3>
+
+    <p>
+        Dataset <code>vic_electricity</code> berisi data konsumsi listrik
+        setiap 30 menit dari jaringan listrik Victoria, Australia.
+    </p>
+
+    <h4>Kolom Dataset</h4>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Kolom</th>
+                <th>Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Demand</td>
+                <td>Total permintaan listrik (MWh)</td>
+            </tr>
+            <tr>
+                <td>Temperature</td>
+                <td>Suhu rata-rata udara (°C)</td>
+            </tr>
+            <tr>
+                <td>Date</td>
+                <td>Tanggal pengamatan</td>
+            </tr>
+            <tr>
+                <td>Holiday</td>
+                <td>Indikator hari libur</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <pre><code>
+data = fetch_dataset(name="vic_electricity")
+data.head()
+    </code></pre>
+
+    <h3>1.3 Agregasi ke Frekuensi Harian</h3>
+
+    <p>
+        Data asli memiliki frekuensi 30 menit. Untuk mempermudah analisis,
+        data diagregasi menjadi frekuensi harian.
+    </p>
+
+    <ul>
+        <li><strong>Demand</strong> → dijumlahkan (sum)</li>
+        <li><strong>Temperature</strong> → dirata-ratakan (mean)</li>
+    </ul>
+
+    <pre><code>
+data = data.resample('D').agg({
+    'Demand': 'sum',
+    'Temperature': 'mean'
+})
+    </code></pre>
+
+    <h3>1.4 Penyesuaian Tanggal (Date Shifting)</h3>
+
+    <p>
+        Tanggal pada dataset digeser agar dimulai dari tahun 2022
+        tanpa mengubah nilai asli data.
+    </p>
+
+    <pre><code>
+new_dates = pd.date_range(
+    start='2022-04-08',
+    periods=len(data),
+    freq='D'
+)
+
+data.index = new_dates
+    </code></pre>
+
+    <h3>1.5 Visualisasi Data Awal</h3>
+
+    <p>
+        Visualisasi dilakukan untuk memahami pola musiman dan tren
+        permintaan listrik terhadap suhu.
+    </p>
+
+    <pre><code>
+fig, axes = plt.subplots(
+    2, 1,
+    figsize=(14,7),
+    sharex=True
+)
+    </code></pre>
+
+    <blockquote>
+        Terlihat pola musiman: permintaan listrik meningkat saat suhu sangat panas
+        maupun sangat dingin.
+    </blockquote>
+
+    <h3>1.6 Split Data Training dan Testing</h3>
+
+    <p>
+        Data dibagi menjadi dua bagian:
+    </p>
+
+    <ul>
+        <li><strong>Training Set</strong> : digunakan untuk melatih model.</li>
+        <li><strong>Testing Set</strong> : digunakan untuk evaluasi model.</li>
+    </ul>
+
+    <pre><code>
+data_train = data.loc[:'2026-05-26']
+data_test  = data.loc['2026-05-27':]
+    </code></pre>
+
+    <hr>
+
+    <h2>Bagian 2: Membuat dan Melatih Forecaster</h2>
+
+    <h3>2.1 Konsep ForecasterRecursive</h3>
+
+    <p>
+        ForecasterRecursive merupakan metode forecasting multi-step
+        yang menggunakan hasil prediksi sebelumnya sebagai input
+        untuk prediksi berikutnya.
+    </p>
+
+    <h4>Komponen Model</h4>
+
+    <ul>
+        <li>Estimator : <code>LGBMRegressor</code></li>
+        <li>Lags : <code>7 hari</code></li>
+        <li>Variabel Exogenous : <code>Temperature</code></li>
+    </ul>
+
+    <h3>2.2 Ilustrasi Lag</h3>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Hari</th>
+                <th>lag_7</th>
+                <th>lag_6</th>
+                <th>lag_5</th>
+                <th>lag_4</th>
+                <th>lag_3</th>
+                <th>lag_2</th>
+                <th>lag_1</th>
+                <th>Temp</th>
+                <th>Target</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>t=8</td>
+                <td>d1</td>
+                <td>d2</td>
+                <td>d3</td>
+                <td>d4</td>
+                <td>d5</td>
+                <td>d6</td>
+                <td>d7</td>
+                <td>T8</td>
+                <td>d8</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>2.3 Pelatihan Model</h3>
+
+    <pre><code>
+forecaster = ForecasterRecursive(
+    estimator=LGBMRegressor(
+        random_state=123,
+        verbose=-1
+    ),
+    lags=7
+)
+
+forecaster.fit(
+    y=data_train['Demand'],
+    exog=data_train['Temperature']
+)
+    </code></pre>
+
+    <p>
+        Model berhasil dilatih menggunakan 7 lag terakhir dan suhu sebagai fitur tambahan.
+    </p>
 
 </section>
 
