@@ -408,731 +408,246 @@ document.write(`
 
 <section id="pengambilan-data-no2">
 
-    <h2>A. Pengambilan Data NO₂ Menggunakan Copernicus Sentinel-5P</h2>
-
-    <p>
-        Pada tahap ini dilakukan pengambilan data Nitrogen Dioksida (NO₂) menggunakan
-        layanan Copernicus Sentinel-5P melalui library OpenEO. Area penelitian
-        ditentukan menggunakan Area of Interest (AOI) berbentuk polygon.
-        Selanjutnya data NO₂ diambil berdasarkan rentang waktu tertentu,
-        kemudian dilakukan agregasi temporal harian dan agregasi spasial
-        untuk memperoleh nilai rata-rata NO₂ pada wilayah penelitian.
-    </p>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-aoi = {
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              97.7990984,
-              0.5823376
-            ],
-            [
-              97.8427489,
-              0.5791454
-            ],
-            [
-              97.8334551,
-              0.5450472
-            ],
-            [
-              97.7937526,
-              0.5477117
-            ],
-            [
-              97.7990984,
-              0.5823376
-            ]
-          ]
-        ]
-      }
-    }
-  ]
-}
-
-s5post = connection.load_collection(
-    "SENTINEL_5P_L2",
-    temporal_extent=["2023-05-05", "2026-05-05"],
-    spatial_extent={
-        "west": 112.68,
-        "south": -7.20,
-        "east": 113.09,
-        "north": -6.89
-    },
-    bands=["NO2"],
-)
-
-# Now aggregate by day to avoid having multiple data per day
-s5p_no2_daily = s5post.aggregate_temporal_period(reducer="mean", period="day")
-
-# Now create a spatial aggregation to generate mean timeseries data
-s5p_no2_aoi = s5p_no2_daily.aggregate_spatial(reducer="mean", geometries=aoi)
-job = s5post.execute_batch(title="NO2 in Telukdalam", outputfile="NO2Telukdalam.nc")
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h1.png" alt="Gambar 1">
-    </div>
-    <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-import netCDF4
-
-file_path = "NO2Telukdalam.nc"
-ds = netCDF4.Dataset(file_path)
-
-# Lihat seluruh variabel yang tersedia
-print("📦 Variabel dalam file:")
-print(ds.variables.keys())
-# dict_keys(['t', 'x', 'y', 'crs', 'NO2'])
-
-# Ambil NO2
-no2 = ds.variables["NO2"][:]
-
-# Ambil Time
-time = ds.variables["t"][:]
-
-# Konversi waktu ke format tanggal jika punya atribut 'units'
-try:
-    time_units = ds.variables["t"].units
-    dates = netCDF4.num2date(time, units=time_units)
-except Exception:
-    dates = time  # fallback kalau tidak ada units
-
-# Tampilkan struktur data NO2
-print(type(no2))
-# type <class 'numpy.ma.core.MaskedArray'>
-
-print(len(no2))
-# banyaknya data record NO2 725
-
-print(len(no2[0]))
-# panjang data perbaris 9
-
-print(len(no2[0][0]))
-# panjang perdata 8
-
-print(no2[0][0][0])
-# 3.7701793e-05
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h2.png" alt="Gambar 1">
-        <p>Hasil pengambilan data NO₂ menggunakan Copernicus Sentinel-5P.</p>
-    </div>
-
-    <ol type="a">
-        <li>
-            <strong>Mengatasi Missing Value menggunakan Metode Interpolasi Linear</strong>
-            <p>
-                Data yang memiliki nilai kosong (missing value) diperbaiki menggunakan
-                metode interpolasi linear agar setiap tanggal memiliki nilai NO₂ yang lengkap.
-            </p>
-        </li>
-            <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-import numpy as np
-import pandas as pd
-
-# Interpolasi Linear
-no2_filled = np.zeros_like(no2)
-# Untuk jaga-jaga jika terdapat '--' tidak berubah menjadi 0
-no2_filled = no2_filled.filled(0)
-
-# loop tiap grid (y,x)
-for i in range(no2.shape[1]):     # 9 baris
-    for j in range(no2.shape[2]): # 8 kolom
-        series = pd.Series(no2[:, i, j])
-        no2_filled[:, i, j] = series.interpolate(method='linear', limit_direction='both').to_numpy()
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-        <li>
-            <strong>Merata-ratakan Data dan Mengubah Format Datetime</strong>
-            <p>
-                Data NO₂ dirata-ratakan menjadi data harian dan kolom tanggal diubah ke
-                format datetime untuk mempermudah analisis deret waktu (time series).
-            </p>
-        </li>
-            <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-new_dates = []
-new_no2 = []
-for i in range(len(dates)):
-    # ubah format datetime
-    new_date = dates[i].strftime('%Y-%m-%d')
-    new_dates.append(new_date)
-    new_no2.append(np.mean(no2_filled[i]))
-</code></pre>
-            </td>
-        </tr>
-    </table>
-        <li>
-            <strong>Menyimpan Data dalam Bentuk CSV</strong>
-            <p>
-                Data hasil preprocessing disimpan ke dalam format CSV agar mudah digunakan
-                pada tahap analisis dan pemodelan selanjutnya.
-            </p>
-        </li>
-            <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-df = pd.DataFrame({
-    "date": new_dates,
-    "NO2": new_no2
-})
-
-# Simpan ke CSV
-df.to_csv("NO2_Bangkalan_timeseries.csv", index=False)
-</code></pre>
-            </td>
-        </tr>
-    </table>
-        
-
-        <li>
-            <strong>Pengecekan Missing Value Data Harian pada CSV</strong>
-            <p>
-                Dilakukan pengecekan kembali untuk memastikan tidak terdapat tanggal
-                yang hilang maupun nilai kosong pada data harian yang telah disimpan.
-            </p>
-        </li>
-            <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-import pandas as pd
-import numpy as np
-
-df = pd.read_csv("NO2_Bangkalan_timeseries.csv")
-
-# Pastikan kolom 'date' bertipe datetime
-df['date'] = pd.to_datetime(df['date'])
-
-# Buat rentang tanggal lengkap
-start_date = "2023-10-01"
-end_date = "2025-09-30"
-full_range = pd.date_range(start=start_date, end=end_date, freq='D')
-
-# Cek tanggal yang hilang
-missing_dates = full_range.difference(df['date'])
-
-print(f"Jumlah hari missing: {len(missing_dates)}")
-print("Daftar tanggal missing:")
-print(missing_dates)
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h3.png" alt="Gambar 1">
-    </div>
-          <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-import pandas as pd
-
-# Pastikan datetime dan sorting
-df['date'] = pd.to_datetime(df['date'])
-df = df.sort_values('date')
-
-# Buat rentang tanggal lengkap
-full_range = pd.date_range(start="2023-10-01", end="2025-09-30", freq='D')
-
-# Reindex agar tanggal yang hilang muncul sebagai NaN
-df = df.set_index('date').reindex(full_range)
-df.index.name = 'date'
-
-# Interpolasi linear berdasarkan indeks waktu
-df['NO2'] = df['NO2'].interpolate(method='time')
-
-# (Opsional) jika masih ada NaN di bagian awal/akhir bisa gunakan forward/backward fill
-df['NO2'] = df['NO2'].fillna(method='bfill').fillna(method='ffill')
-
-# Simpan kembali ke CSV
-df.to_csv("no2_timeseries_interpolated.csv")
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h4.png" alt="Gambar 1">
-    </div>
-
-        <li>
-            <strong>Deteksi Outlier Menggunakan Metode IQR</strong>
-            <p>
-                Outlier dideteksi menggunakan metode Interquartile Range (IQR) dengan
-                menghitung Q1, Q3, dan IQR untuk mengidentifikasi data yang berada di luar
-                rentang normal distribusi data.
-            </p>
-        </li>
-            <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-
-df = pd.read_csv("no2_timeseries_interpolated.csv")
-
-df['date'] = pd.to_datetime(df['date'])
-
-# Hitung IQR
-Q1 = df['NO2'].quantile(0.25)
-Q3 = df['NO2'].quantile(0.75)
-IQR = Q3 - Q1
-
-lower_bound = Q1 - 1.5 * IQR
-upper_bound = Q3 + 1.5 * IQR
-
-# Filter outlier
-outliers_iqr = df[(df['NO2'] < lower_bound) | (df['NO2'] > upper_bound)]
-
-print("Jumlah Outlier (IQR):", len(outliers_iqr))
-print(outliers_iqr[['date', 'NO2']].head())
-
-</code></pre>
-            </td>
-        </tr>
-    </table>
-    </ol>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-# === Visualisasi ===
-plt.figure(figsize=(15,5))
-plt.plot(df['date'], df['NO2'], label="NO2", linewidth=1)
-
-# Titik Outlier
-plt.scatter(outliers_iqr['date'], outliers_iqr['NO2'], 
-            color='red', marker='o', label="Outliers")
-
-# Garis batas atas & bawah
-plt.axhline(upper_bound, color='orange', linestyle='dashed', label="Upper Bound (IQR)")
-plt.axhline(lower_bound, color='blue', linestyle='dashed', label="Lower Bound (IQR)")
-
-plt.title("Deteksi Outlier Data NO2 (Metode IQR)")
-plt.xlabel("Tanggal")
-plt.ylabel("Kadar NO2")
-plt.legend()
-plt.tight_layout()
-plt.xticks(
-    ticks=[df['date'].iloc[0], df['date'].iloc[-1]],
-    labels=[df['date'].iloc[0].strftime('%Y-%m-%d'),
-            df['date'].iloc[-1].strftime('%Y-%m-%d')]
-)
-plt.show()
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h5.png" alt="Gambar 1">
-    </div>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-# Tandai outlier menjadi NaN
-df['NO2_cleaned'] = df['NO2'].mask((df['NO2'] < lower_bound) | (df['NO2'] > upper_bound))
-
-print("Jumlah nilai yang dinyatakan sebagai outlier:", df['NO2_cleaned'].isna().sum())
-
-# Interpolasi linear untuk mengisi kembali nilai outlier
-df['NO2_filled'] = df['NO2_cleaned'].interpolate(method='linear')
-
-# Jika masih tersisa NaN di ujung data, isi dengan forward/backward fill
-df['NO2_filled'] = df['NO2_filled'].bfill().ffill()
-# df['NO2_filled'] = df['NO2_filled'].fillna(method='bfill').fillna(method='ffill')
-
-print("Jumlah missing setelah interpolasi:", df['NO2_filled'].isna().sum())
-</code></pre>
-            </td>
-        </tr>
-    </table>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-
-plt.figure(figsize=(15,5))
-# Plot data hasil interpolasi
-plt.plot(df['date'], df['NO2_filled'], label="NO2 (Interpolated)", linewidth=1)
-# Tampilkan hanya tanggal awal dan akhir di sumbu X
-plt.xticks(
-    ticks=[df['date'].iloc[0], df['date'].iloc[-1]],
-    labels=[df['date'].iloc[0].strftime('%Y-%m-%d'),
-            df['date'].iloc[-1].strftime('%Y-%m-%d')]
-)
-plt.title("Plot Data NO2 Setelah Outlier Removal & Interpolasi")
-plt.xlabel("Tanggal")
-plt.ylabel("Kadar NO2")
-plt.legend()
-plt.tight_layout()
-plt.show()
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h6.png" alt="Gambar 1">
-    </div>
-
-    <h2>3. Modeling Menggunakan KNN Regression</h2>
-    <p>
-        Setelah data melalui tahap preprocessing, dilakukan pemodelan menggunakan
-        algoritma K-Nearest Neighbors (KNN) Regression. Model dibangun dengan memanfaatkan
-        data historis NO₂ sebagai fitur prediktor untuk memprediksi nilai NO₂ pada periode berikutnya.
-        Nilai parameter K dipilih berdasarkan hasil evaluasi model untuk memperoleh tingkat
-        akurasi terbaik. Kinerja model dievaluasi menggunakan metrik seperti MAE, MSE,
-        RMSE, dan R² Score.
-    </p>
-    <strong>UJI KOLERASI DATA</strong>
-      <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
-
-# Normalisasi data
-scaler = MinMaxScaler()
-df['NO2_scaled'] = scaler.fit_transform(df[['NO2']])
-
-def create_supervised(data, n_lag=30):
-    df_supervised = pd.DataFrame()
-
-    for i in range(n_lag, 0, -1):
-        df_supervised[f'NO2(t-{i})'] = data.shift(i)
-
-    df_supervised['NO2(t)'] = data
-
-    df_supervised.dropna(inplace=True)
-
-    return df_supervised
-
-supervised_df30 = create_supervised(df['NO2_scaled'], n_lag=30)
-
-lag_cols = supervised_df30.drop(columns=['NO2(t)']).columns
-correlations = supervised_df30[lag_cols].corrwith(supervised_df30['NO2(t)'])
-
-print(correlations)
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h7.png" alt="Gambar 1">
-    </div>
-    <strong>NORMALISAI DATA</strong>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-from sklearn.preprocessing import MinMaxScaler
-import pandas as pd
-
-scaler = MinMaxScaler()
-
-df['NO2_scaled'] = scaler.fit_transform(df[['NO2']])
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h8.png" alt="Gambar 1">
-    </div>
-    <strong>MENGUBAH DATA</strong>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-supervised_df = create_supervised(df['NO2_scaled'], n_lag=4)
-
-print(supervised_df)
-print(supervised_df.shape)
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h9.png" alt="Gambar 1">
-    </div>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-supervised_df10 = create_supervised(df['NO2_scaled'], n_lag=10)
-
-print(supervised_df10)
-print(supervised_df10.shape)
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h10.png" alt="Gambar 1">
-    </div>
-    <strong>MODELING DAN EVALUATION</strong>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
-import numpy as np
-
-def MAPE(y_true, y_pred):
-    y_true, y_pred = np.array(y_true), np.array(y_pred)
-    # Hindari pembagian dengan nol
-    nonzero = y_true != 0
-    return np.mean(np.abs((y_true[nonzero] - y_pred[nonzero]) / y_true[nonzero])) * 100
-
-def train_knn(df_supervised, model_name=""):
-    # Pisahkan fitur & label
-    X = df_supervised.drop(columns=['NO2(t)']).values
-    y = df_supervised['NO2(t)'].values
-
-    # Split data 80/20
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, shuffle=False
-    )
-
-    # Model KNN
-    knn = KNeighborsRegressor(n_neighbors=5)
-    knn.fit(X_train, y_train)
-
-    # Prediksi
-    y_pred = knn.predict(X_test)
-
-    # Evaluasi
-    mse = mean_squared_error(y_test, y_pred)
-    rmse = np.sqrt(mse)
-    r2 = r2_score(y_test, y_pred)
-    mape = MAPE(y_test, y_pred)
-
-    print(f"\n=== {model_name} ===")
-    print(f"Train Size: {len(X_train)} — Test Size: {len(X_test)}")
-    print(f"RMSE: {rmse:.6f}")
-    print(f"R² Score: {r2:.4f}")
-    print(f"MAPE: {mape:.4f}%")
-
-    return knn, y_test, y_pred
-
-
-# Train model untuk 4 hari sebelumnya
-knn_4, y_test_4, y_pred_4 = train_knn(supervised_df, "KNN - 4 Hari Sebelumnya")
-
-# Train model untuk 10 hari sebelumnya
-knn_10, y_test_10, y_pred_10 = train_knn(supervised_df10, "KNN - 10 Hari Sebelumnya")
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h11.png" alt="Gambar 1">
-    </div>
-    <strong>PLOTTING</strong>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-import matplotlib.pyplot as plt
-import numpy as np
-
-plt.figure()
-plt.plot(np.arange(len(y_test_4)), y_test_4, label="Actual")
-plt.plot(np.arange(len(y_pred_4)), y_pred_4, label="Predicted")
-plt.title("KNN Regression - 4 Hari Sebelumnya")
-plt.xlabel("Sample Index")
-plt.ylabel("NO2 Value")
-plt.legend()
-plt.show()
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h12.png" alt="Gambar 1">
-    </div>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-plt.figure()
-plt.plot(np.arange(len(y_test_10)), y_test_10, label="Actual")
-plt.plot(np.arange(len(y_pred_10)), y_pred_10, label="Predicted")
-plt.title("KNN Regression - 10 Hari Sebelumnya")
-plt.xlabel("Sample Index")
-plt.ylabel("NO2 Value")
-plt.legend()
-plt.show()
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h13.png" alt="Gambar 1">
-    </div>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsRegressor
-
-# Feature dan target
-X = supervised_df30.drop(columns=['NO2(t)'])
-y = supervised_df30['NO2(t)']
-
-# Split data
-X_train_30, X_test_30, y_train_30, y_test_30 = train_test_split(
-    X, y,
-    test_size=0.2,
-    shuffle=False
-)
-
-# Model KNN
-knn_30 = KNeighborsRegressor(n_neighbors=5)
-
-# Training
-knn_30.fit(X_train_30, y_train_30)
-
-# Prediksi
-y_pred_30 = knn_30.predict(X_test_30)
-</code></pre>
-            </td>
-        </tr>
-    </table>
-        <table border="1" style="width:100%; border-collapse:collapse;">
-        <tr>
-            <th>Kode Program</th>
-        </tr>
-        <tr>
-            <td>
-<pre><code>
-plt.figure(figsize=(12,5))
-plt.plot(y_test_30.values, label="Actual")
-plt.plot(y_pred_30, label="Predicted")
-
-plt.title("KNN Regression - 30 Hari Sebelumnya")
-plt.xlabel("Sample Index")
-plt.ylabel("NO2 Value")
-plt.legend()
-plt.grid(True)
-plt.show()
-</code></pre>
-            </td>
-        </tr>
-    </table>
-
-    <div class="figure-placeholder">
-        <img src="h14.png" alt="Gambar 1">
-    </div>
-    <h2>4. Evaluasi dan Visualisasi Hasil</h2>
-    <p>
-        Hasil prediksi dari model KNN Regression dibandingkan dengan data aktual untuk
-        mengukur performa model. Selain itu, dilakukan visualisasi dalam bentuk grafik
-        time series agar pola perubahan konsentrasi NO₂ dan hasil prediksi dapat diamati
-        dengan lebih jelas. Tahap ini digunakan untuk menilai kemampuan model dalam
-        merepresentasikan kondisi data sebenarnya.
-    </p>
+    <section class="materi">
+  <h1>Forecaster Explainability: Feature Importance, SHAP Values, dan Partial Dependence Plots</h1>
+
+  <p>
+    Notebook ini merupakan reproduksi dan pengembangan dari
+    <strong>Skforecast Explainability Guide</strong> dengan tambahan
+    penjelasan mendalam dan jawaban pertanyaan tugas.
+  </p>
+
+  <hr>
+
+  <h2>Jawaban Pertanyaan</h2>
+
+  <hr>
+
+  <h3>Pertanyaan 1: Analisa Prediksi Tentang Apa?</h3>
+
+  <p>
+    Analisis dalam notebook ini adalah prediksi
+    <strong>permintaan listrik harian (Electricity Demand)</strong>
+    di negara bagian Victoria, Australia.
+  </p>
+
+  <h4>Detail Lengkap Konteks</h4>
+  <ul>
+    <li>
+      <strong>Dataset:</strong> <code>vic_electricity</code> — data penggunaan
+      listrik setiap 30 menit dari jaringan listrik Victoria, Australia.
+    </li>
+    <li>
+      <strong>Target Perkiraan:</strong> Kolom <code>Demand</code>
+      (total permintaan listrik dalam satuan MWh per hari).
+    </li>
+    <li>
+      <strong>Fitur Tambahan:</strong> Kolom
+      <code>Temperature</code> (rata-rata suhu harian dalam °C).
+    </li>
+    <li>
+      <strong>Tujuan Utama:</strong> Menjelaskan mengapa model memberikan
+      prediksi tertentu dan fitur apa yang paling berpengaruh.
+    </li>
+    <li>
+      <strong>Relevansi:</strong> Permintaan listrik sangat dipengaruhi
+      oleh kondisi cuaca sehingga suhu menjadi fitur penting.
+    </li>
+  </ul>
+
+  <hr>
+
+  <h3>Pertanyaan 2: Bagaimana Bentuk Data Training-nya?</h3>
+
+  <h4>Input (X_train)</h4>
+
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Kolom</th>
+        <th>Tipe</th>
+        <th>Penjelasan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>lag_1</td>
+        <td>Numerik</td>
+        <td>Nilai Demand 1 hari sebelumnya</td>
+      </tr>
+      <tr>
+        <td>lag_2</td>
+        <td>Numerik</td>
+        <td>Nilai Demand 2 hari sebelumnya</td>
+      </tr>
+      <tr>
+        <td>lag_3</td>
+        <td>Numerik</td>
+        <td>Nilai Demand 3 hari sebelumnya</td>
+      </tr>
+      <tr>
+        <td>lag_4</td>
+        <td>Numerik</td>
+        <td>Nilai Demand 4 hari sebelumnya</td>
+      </tr>
+      <tr>
+        <td>lag_5</td>
+        <td>Numerik</td>
+        <td>Nilai Demand 5 hari sebelumnya</td>
+      </tr>
+      <tr>
+        <td>lag_6</td>
+        <td>Numerik</td>
+        <td>Nilai Demand 6 hari sebelumnya</td>
+      </tr>
+      <tr>
+        <td>lag_7</td>
+        <td>Numerik</td>
+        <td>Nilai Demand 7 hari sebelumnya</td>
+      </tr>
+      <tr>
+        <td>Temperature</td>
+        <td>Numerik</td>
+        <td>Rata-rata suhu pada hari yang sama</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    <strong>Output (y_train):</strong> Kolom <code>Demand</code>, yaitu
+    nilai permintaan listrik pada hari yang ingin diprediksi.
+  </p>
+
+  <blockquote>
+    Berdasarkan permintaan listrik 7 hari terakhir dan suhu hari ini,
+    berapakah permintaan listrik hari ini?
+  </blockquote>
+
+  <hr>
+
+  <h3>Pertanyaan 3: Apa Itu Lag?</h3>
+
+  <p>
+    <strong>Lag</strong> adalah nilai dari data time series pada waktu
+    sebelumnya yang digunakan sebagai fitur input model.
+  </p>
+
+  <h4>Analogi Sederhana</h4>
+
+  <blockquote>
+    Jika ingin memperkirakan penggunaan listrik hari ini, maka model
+    dapat melihat penggunaan listrik kemarin (lag_1), dua hari lalu
+    (lag_2), hingga satu minggu lalu (lag_7).
+  </blockquote>
+
+  <h4>Formula Matematis</h4>
+
+  <pre><code>lag_k(t) = y(t - k)</code></pre>
+
+  <p>Dimana:</p>
+
+  <ul>
+    <li><code>y(t)</code> = nilai target pada waktu sekarang</li>
+    <li><code>y(t-1)</code> = lag_1</li>
+    <li><code>y(t-7)</code> = lag_7</li>
+  </ul>
+
+  <h4>Mengapa Lag Penting?</h4>
+
+  <ol>
+    <li>
+      <strong>Autokorelasi:</strong> Nilai masa lalu sering memiliki
+      hubungan dengan nilai saat ini.
+    </li>
+    <li>
+      <strong>Pola Musiman:</strong> Permintaan listrik hari tertentu
+      sering mirip dengan hari yang sama pada minggu sebelumnya.
+    </li>
+    <li>
+      <strong>Konteks Temporal:</strong> Tanpa lag, model tidak mengetahui
+      kondisi sebelumnya.
+    </li>
+  </ol>
+
+  <p>
+    Dalam Skforecast, parameter <code>lags=7</code> berarti model
+    menggunakan lag_1 hingga lag_7 sebagai fitur.
+  </p>
+
+  <hr>
+
+  <h3>Pertanyaan 4: Proses Analisis yang Dilakukan</h3>
+
+  <p>
+    Analisis dilakukan melalui lima tahapan utama sebagai berikut:
+  </p>
+
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Tahap</th>
+        <th>Nama</th>
+        <th>Isi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Persiapan Data</td>
+        <td>Unduh dataset, agregasi data, dan split train-test</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Pelatihan Model</td>
+        <td>ForecasterRecursive + LGBMRegressor + lags=7</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Feature Importance</td>
+        <td>Analisis kepentingan fitur bawaan LightGBM</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Analisis SHAP</td>
+        <td>Summary Plot, Beeswarm Plot, Force Plot, Dependence Plot</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Permutation & PDP</td>
+        <td>Permutation Importance dan Partial Dependence Plot</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2>Bagian 1: Instalasi Library dan Import Data</h2>
+
+  <h3>1.1 Instalasi dan Import Library</h3>
+
+  <p>
+    Library yang digunakan dalam analisis ini:
+  </p>
+
+  <ul>
+    <li>
+      <strong>skforecast</strong> – Framework forecasting time series
+      berbasis scikit-learn.
+    </li>
+    <li>
+      <strong>lightgbm</strong> – Model gradient boosting berbasis pohon
+      yang cepat dan efisien.
+    </li>
+    <li>
+      <strong>shap</strong> – Library untuk menjelaskan prediksi model
+      menggunakan Shapley Values.
+    </li>
+    <li>
+      <strong>sklearn.inspection</strong> – Digunakan untuk
+      Permutation Importance dan Partial Dependence Plot.
+    </li>
+  </ul>
+</section>
 
 </section>
 
