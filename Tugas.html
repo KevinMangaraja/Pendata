@@ -764,6 +764,9 @@ fig, axes = plt.subplots(
         Terlihat pola musiman: permintaan listrik meningkat saat suhu sangat panas
         maupun sangat dingin.
     </blockquote>
+    <div style="text-align:center;">
+      <img src="sh_1.png">
+    </div>
 
     <h3>1.6 Split Data Training dan Testing</h3>
 
@@ -903,6 +906,9 @@ display(feat_imp)
         <tr><td>lag_5</td><td>295</td></tr>
     </tbody>
 </table>
+    <div style="text-align:center;">
+      <img src="sh_2.png">
+    </div>
 
 <p>
     Berdasarkan hasil tersebut, Temperature dan lag_1 menjadi fitur
@@ -1055,6 +1061,9 @@ shap_values = explainer.shap_values(X_train)
     <li>lag_1 menjadi fitur historis paling penting.</li>
     <li>lag_7 menunjukkan adanya pola mingguan.</li>
 </ul>
+    <div style="text-align:center;">
+      <img src="sh_3.png">
+    </div>
 
 <h3>SHAP Beeswarm Plot</h3>
 
@@ -1068,6 +1077,9 @@ shap_values = explainer.shap_values(X_train)
     <li>Kanan = meningkatkan prediksi.</li>
     <li>Kiri = menurunkan prediksi.</li>
 </ul>
+    <div style="text-align:center;">
+      <img src="sh_4.png">
+    </div>
 
 <h3>SHAP Dependence Plot</h3>
 
@@ -1081,6 +1093,15 @@ shap_values = explainer.shap_values(X_train)
 </p>
 
 <hr>
+    <div style="text-align:center;">
+      <img src="sh_5.png">
+    </div>
+    <div style="text-align:center;">
+      <img src="sh_6">
+    </div>
+    <div style="text-align:center;">
+      <img src="sh_7.png">
+    </div>
 
 <h2>Bagian 6: Explainability pada Prediksi Masa Depan</h2>
 
@@ -1133,6 +1154,9 @@ predictions = forecaster.predict(
 </p>
 
 <hr>
+    <div style="text-align:center;">
+      <img src="sh_8.png">
+    </div>
 
 <h2>Bagian 7: Permutation Importance dan Partial Dependence Plot</h2>
 
@@ -1159,6 +1183,9 @@ predictions = forecaster.predict(
         <tr><td>lag_2</td><td>0.1249</td></tr>
     </tbody>
 </table>
+    <div style="text-align:center;">
+      <img src="sh_9.png">
+    </div>
 
 <h3>Partial Dependence Plot (PDP)</h3>
 
@@ -1173,6 +1200,9 @@ predictions = forecaster.predict(
 </ul>
 
 <hr>
+    <div style="text-align:center;">
+      <img src="sh_10.png">
+    </div>
 
 <h2>Bagian 8: Kesimpulan</h2>
 
